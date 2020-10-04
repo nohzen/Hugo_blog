@@ -40,7 +40,8 @@ sequenceDiagrams:
 
 ---
 
-なんとなく、はてなブログからHugoに移行した
+なんとなく、はてなブログからHugoに移行した。  
+以下、自分用のメモ（公式ドキュメントをコピペしただけの作業ログなので、公式を見た方がいい）。
 
 # 環境構築 on Ubuntu18.04
 ## Install
@@ -95,10 +96,50 @@ hugo server -D
 hugo -D # ./public/ に生成される
 ```
 
+## GitHub Pagesでホスティング
+GitHub Pagesでは、
+- masterブランチにdocsディレクトリを作り、そこにhtmlを置く
+（`publishDir = "docs"`に設定すると良い）
+- htmlを置く用のgh-pagesブランチを作る
+
+の2通りの方法がある。  
+前者の方法だと、サイトの生成元のファイルと生成したサイトが混ざってしまう。  
+後者の方法であれば、Hugeのソースコードと生成したサイトを別ブランチで管理できる。  
+
+以下では後者の方法を説明:
+
+- config.tomlにURLを設定
+```config.toml
+baseURL = "https://nohzen.github.io/Hugo_blog"
+```
+.gitignoreにpublicを追加(masterでは無視したいので)
+```.gitignore
+/public/
+/resources/_gen
+```
+- 空のgh-pagesブランチ作成
+```bash
+git checkout --orphan gh-pages
+git reset --hard
+git commit --allow-empty -m "Initializing gh-pages branch"
+git push origin gh-pages
+git checkout main
+```
+- git worktreeでmasterとgh-pagesブランチを同時に扱えるようにする
+```bash
+rm -rf public
+git worktree add -B gh-pages public origin/gh-pages
+hugo
+cd public && git add --all && git commit -m "Publishing to gh-pages" && cd ..
+git push origin gh-pages
+```
+最後の手順は毎回やるのはめんどうなので、[shellにしておく](https://github.com/nohzen/Hugo_blog/blob/main/publish_to_ghpages.sh)。
+
+
 ## 参考
 - https://gohugo.io/getting-started/installing
 - https://gohugo.io/getting-started/quick-start/
 - https://knowledge.sakura.ad.jp/22908/
-
+- https://gohugo.io/hosting-and-deployment/hosting-on-github/
 
 
