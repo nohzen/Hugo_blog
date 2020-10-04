@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Hugo on memo</title>
-    <link>http://localhost:1313/tags/hugo/</link>
+    <link>https://nohzen.github.io/Hugo_blog/tags/hugo/</link>
     <description>Recent content in Hugo on memo</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
-    <lastBuildDate>Sun, 04 Oct 2020 11:42:39 +0900</lastBuildDate><atom:link href="http://localhost:1313/tags/hugo/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 04 Oct 2020 11:42:39 +0900</lastBuildDate><atom:link href="https://nohzen.github.io/Hugo_blog/tags/hugo/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>はてなブログからHugoに移行した</title>
-      <link>http://localhost:1313/post/my_first_blog/</link>
+      <link>https://nohzen.github.io/Hugo_blog/post/my_first_blog/</link>
       <pubDate>Sun, 04 Oct 2020 11:42:39 +0900</pubDate>
       
-      <guid>http://localhost:1313/post/my_first_blog/</guid>
+      <guid>https://nohzen.github.io/Hugo_blog/post/my_first_blog/</guid>
       <description>なんとなく、はてなブログからHugoに移行した。 以下、自分用のメモ（公式ドキュメントをコピペしただけの作業ログなので、公式を見た方がいい）。</description>
     </item>
     

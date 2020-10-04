@@ -2,35 +2,35 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Posts on memo</title>
-    <link>http://localhost:1313/post/</link>
+    <link>https://nohzen.github.io/Hugo_blog/post/</link>
     <description>Recent content in Posts on memo</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
-    <lastBuildDate>Sun, 04 Oct 2020 17:15:50 +0900</lastBuildDate><atom:link href="http://localhost:1313/post/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 04 Oct 2020 17:15:50 +0900</lastBuildDate><atom:link href="https://nohzen.github.io/Hugo_blog/post/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Fast Cost-Volume Filtering for Visual Correspondence and Beyond</title>
-      <link>http://localhost:1313/post/rhemann2013/</link>
+      <link>https://nohzen.github.io/Hugo_blog/post/rhemann2013/</link>
       <pubDate>Sun, 04 Oct 2020 17:15:50 +0900</pubDate>
       
-      <guid>http://localhost:1313/post/rhemann2013/</guid>
+      <guid>https://nohzen.github.io/Hugo_blog/post/rhemann2013/</guid>
       <description>概要 Stereo matching, optuical flow, interactive segmentationなどをラベル問題として定式化 コスト関数の平滑化にGuided Filterを用いることで、精度を落とさず</description>
     </item>
     
     <item>
       <title>HomebrewをUbuntu18.04にインストール</title>
-      <link>http://localhost:1313/post/homebrew_on_ubuntu18/</link>
+      <link>https://nohzen.github.io/Hugo_blog/post/homebrew_on_ubuntu18/</link>
       <pubDate>Sun, 04 Oct 2020 12:07:18 +0900</pubDate>
       
-      <guid>http://localhost:1313/post/homebrew_on_ubuntu18/</guid>
+      <guid>https://nohzen.github.io/Hugo_blog/post/homebrew_on_ubuntu18/</guid>
       <description>aptとかsnapと何が違うのか理解してないけど、Hugoをインストールするために導入した。 Home下とかにインストールできるらしい (sud</description>
     </item>
     
     <item>
       <title>はてなブログからHugoに移行した</title>
-      <link>http://localhost:1313/post/my_first_blog/</link>
+      <link>https://nohzen.github.io/Hugo_blog/post/my_first_blog/</link>
       <pubDate>Sun, 04 Oct 2020 11:42:39 +0900</pubDate>
       
-      <guid>http://localhost:1313/post/my_first_blog/</guid>
+      <guid>https://nohzen.github.io/Hugo_blog/post/my_first_blog/</guid>
       <description>なんとなく、はてなブログからHugoに移行した。 以下、自分用のメモ（公式ドキュメントをコピペしただけの作業ログなので、公式を見た方がいい）。</description>
     </item>
     

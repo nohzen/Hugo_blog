@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Segmentation on memo</title>
-    <link>http://localhost:1313/tags/segmentation/</link>
+    <link>https://nohzen.github.io/Hugo_blog/tags/segmentation/</link>
     <description>Recent content in Segmentation on memo</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
-    <lastBuildDate>Sun, 04 Oct 2020 17:15:50 +0900</lastBuildDate><atom:link href="http://localhost:1313/tags/segmentation/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 04 Oct 2020 17:15:50 +0900</lastBuildDate><atom:link href="https://nohzen.github.io/Hugo_blog/tags/segmentation/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Fast Cost-Volume Filtering for Visual Correspondence and Beyond</title>
-      <link>http://localhost:1313/post/rhemann2013/</link>
+      <link>https://nohzen.github.io/Hugo_blog/post/rhemann2013/</link>
       <pubDate>Sun, 04 Oct 2020 17:15:50 +0900</pubDate>
       
-      <guid>http://localhost:1313/post/rhemann2013/</guid>
+      <guid>https://nohzen.github.io/Hugo_blog/post/rhemann2013/</guid>
       <description>概要 Stereo matching, optuical flow, interactive segmentationなどをラベル問題として定式化 コスト関数の平滑化にGuided Filterを用いることで、精度を落とさず</description>
     </item>
     
