@@ -1,5 +1,5 @@
-# baseURL = "https://nohzen.github.io/Hugo_blog"
-baseURL = "http://localhost:1313/"
+baseURL = "https://nohzen.github.io/Hugo_blog"
+# baseURL = "http://localhost:1313/"
 languageCode = "ja"
 defaultContentLanguage = "ja"                             # en / zh-cn / ... (This field determines which i18n file to use)
 title = "memo"
