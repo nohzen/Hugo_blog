@@ -13,7 +13,7 @@
       <pubDate>Sun, 04 Oct 2020 11:42:39 +0900</pubDate>
       
       <guid>https://nohzen.github.io/Hugo_blog/post/my_first_blog/</guid>
-      <description>なんとなく、はてなブログからHugoに移行した 環境構築 on Ubuntu18.04 Install Hugoのインストールは、公式を見るとhomebrewを推奨してるっぽい (apt</description>
+      <description>なんとなく、はてなブログからHugoに移行した。 以下、自分用のメモ（公式ドキュメントをコピペしただけの作業ログなので、公式を見た方がいい）。</description>
     </item>
     
   </channel>
