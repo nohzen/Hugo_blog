@@ -4,7 +4,7 @@ date: 2020-10-04T12:07:18+09:00
 lastmod: 2020-10-04T12:07:18+09:00
 draft: false
 description: ""
-tags: [Homebrew]
+tags: ["Homebrew"]
 
 ---
 

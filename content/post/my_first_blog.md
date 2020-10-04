@@ -5,7 +5,7 @@ lastmod: 2020-10-04T11:42:39+09:00
 draft: false
 keywords: []
 description: ""
-tags: [Hugo]
+tags: ["Hugo"]
 categories: []
 author: ""
 
