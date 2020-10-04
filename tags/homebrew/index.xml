@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Homebrew on memo</title>
-    <link>https://nohzen.github.io/Hugo_blog/tags/homebrew/</link>
+    <link>http://localhost:1313/tags/homebrew/</link>
     <description>Recent content in Homebrew on memo</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
-    <lastBuildDate>Sun, 04 Oct 2020 12:07:18 +0900</lastBuildDate><atom:link href="https://nohzen.github.io/Hugo_blog/tags/homebrew/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 04 Oct 2020 12:07:18 +0900</lastBuildDate><atom:link href="http://localhost:1313/tags/homebrew/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>HomebrewをUbuntu18.04にインストール</title>
-      <link>https://nohzen.github.io/Hugo_blog/post/homebrew_on_ubuntu18/</link>
+      <link>http://localhost:1313/post/homebrew_on_ubuntu18/</link>
       <pubDate>Sun, 04 Oct 2020 12:07:18 +0900</pubDate>
       
-      <guid>https://nohzen.github.io/Hugo_blog/post/homebrew_on_ubuntu18/</guid>
+      <guid>http://localhost:1313/post/homebrew_on_ubuntu18/</guid>
       <description>aptとかsnapと何が違うのか理解してないけど、Hugoをインストールするために導入した。 Home下とかにインストールできるらしい (sud</description>
     </item>
     

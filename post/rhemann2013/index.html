@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Fast Cost-Volume Filtering for Visual Correspondence and Beyond - memo</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="nohzen" /><meta name="description" content="概要 Stereo matching, optuical flow, interactive segmentationなどをラベル問題として定式化 コスト関数の平滑化にGuided Filterを用いることで、精度を落とさず" /><meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.75.1 with theme even" />
+
+
+<link rel="canonical" href="http://localhost:1313/post/rhemann2013/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.c7bc1becf36bcf6a9ebd25d2947e43a2eb745ddb0c9a32b43126fd7fa460c351.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="Fast Cost-Volume Filtering for Visual Correspondence and Beyond" />
+<meta property="og:description" content="概要 Stereo matching, optuical flow, interactive segmentationなどをラベル問題として定式化 コスト関数の平滑化にGuided Filterを用いることで、精度を落とさず" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://localhost:1313/post/rhemann2013/" />
+<meta property="article:published_time" content="2020-10-04T17:15:50+09:00" />
+<meta property="article:modified_time" content="2020-10-04T17:15:50+09:00" />
+<meta itemprop="name" content="Fast Cost-Volume Filtering for Visual Correspondence and Beyond">
+<meta itemprop="description" content="概要 Stereo matching, optuical flow, interactive segmentationなどをラベル問題として定式化 コスト関数の平滑化にGuided Filterを用いることで、精度を落とさず">
+<meta itemprop="datePublished" content="2020-10-04T17:15:50+09:00" />
+<meta itemprop="dateModified" content="2020-10-04T17:15:50+09:00" />
+<meta itemprop="wordCount" content="1760">
+
+
+
+<meta itemprop="keywords" content="Stereo Matching,Optical Flow,Segmentation," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Fast Cost-Volume Filtering for Visual Correspondence and Beyond"/>
+<meta name="twitter:description" content="概要 Stereo matching, optuical flow, interactive segmentationなどをラベル問題として定式化 コスト関数の平滑化にGuided Filterを用いることで、精度を落とさず"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">memo</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">memo</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Fast Cost-Volume Filtering for Visual Correspondence and Beyond</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2020-10-04 </span>
+        
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">コンテンツ</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#概要">概要</a></li>
+    <li><a href="#論文情報">論文情報</a>
+      <ul>
+        <li><a href="#著者">著者</a></li>
+      </ul>
+    </li>
+    <li><a href="#内容">内容</a>
+      <ul>
+        <li><a href="#stereo-matchingについて具体例">Stereo matchingについて具体例</a></li>
+        <li><a href="#ラベリング問題">ラベリング問題</a></li>
+        <li><a href="#手法">手法</a></li>
+      </ul>
+    </li>
+    <li><a href="#処理速度">処理速度</a></li>
+    <li><a href="#感想批判">感想・批判</a></li>
+    <li><a href="#参考文献">参考文献</a></li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <h1 id="概要">概要</h1>
+<ul>
+<li>Stereo matching, optuical flow, interactive segmentationなどをラベル問題として定式化</li>
+<li>コスト関数の平滑化にGuided Filterを用いることで、精度を落とさずに高速化</li>
+</ul>
+<h1 id="論文情報">論文情報</h1>
+<ul>
+<li><a href="https://www.ims.tuwien.ac.at/publications/tuw-202088">論文website</a>
+公式Matlabの実装が公開。論文に依ると、CUDA実装もしたみたいだが、非公開。</li>
+<li><a href="https://github.com/fjordyo0707/StereoMatching-CostFilter">野良実装?</a></li>
+<li><a href="https://slideplayer.com/slide/6108371/">https://slideplayer.com/slide/6108371/</a></li>
+<li><a href="https://slideplayer.com/slide/8874463/">https://slideplayer.com/slide/8874463/</a></li>
+</ul>
+<h2 id="著者">著者</h2>
+<p>ウィーン工科大学, Microsoftの人たち</p>
+<ul>
+<li>Christoph Rhemann(現Google)</li>
+<li>Asmaa Hosni</li>
+<li>Michael Bleyer(現Microsoft)</li>
+<li><a href="https://hci.iwr.uni-heidelberg.de/vislearn/people/carsten-rother/">Carsten Rother</a> (ハイデルベルク大学)<br>
+GrabCutの著者。<a href="https://hci.iwr.uni-heidelberg.de/vislearn/">この方の研究室</a>、最近の研究も面白そう。</li>
+<li><a href="https://www.ims.tuwien.ac.at/people/margrit-gelautz">Margrit Gelautz</a> (ウィーン工科大学)</li>
+</ul>
+<h1 id="内容">内容</h1>
+<h2 id="stereo-matchingについて具体例">Stereo matchingについて具体例</h2>
+<figure class="center">
+    <img src="/images/rhemann2013/stereo_match.png" width="320"/> 
+</figure>
+
+<ol>
+<li>cost volume $C_{x, y, l}$は2枚の画像 $I, I^{'}$ の変位$l$の時の差分と、x方向の微分の差分の重み付き和(上の画像の(b))
+<figure>
+    <img src="/images/rhemann2013/cost_volume.png" width="320"/> 
+</figure>
+</li>
+<li>変位ごとに、元の画像をガイドとして重み付き平均する(上の画像の(e))
+<figure>
+    <img src="/images/rhemann2013/smooth.png" width="160"/> 
+</figure>
+</li>
+<li>平滑化したcost volumeのargminが解となる変位</li>
+<li>occlusionがあるところ（左右の画像の両方をベースにして2回マッチングをし、左右の結果がコンシステントでない場所）は周りの変位で修正する</li>
+</ol>
+<h2 id="ラベリング問題">ラベリング問題</h2>
+<p>以下の3つの例は、画像の各Pixelのラベリング問題として解釈できる。</p>
+<ul>
+<li>Stereo matchingは平行化した2枚の画像の間に、各Pixelでどれくらい変位があるかを求める問題。各Pixelに対して、変位を割り当てるラベル問題と解釈できる。</li>
+<li>Optuical flowは各Pixelに対して、動きベクトルを求める問題。これも各Pixelに対して、変位を割り当てるラベル問題と解釈できる</li>
+<li>interactive segmentationはユーザーが一部のPixelに対して与えた初期ラベルを元に、各Pixelを前景と背景に分類する問題。2ラベル問題になっている。</li>
+</ul>
+<h2 id="手法">手法</h2>
+<p>画像の各Pixelのラベリング問題を解くアルゴリズムとして以下を考案。</p>
+<ol>
+<li>各Pixel・各ラベルに対して、コストを計算。コストはpixel座標$x, y$とラベル$l$のindexをもつので3次元なので<strong>cost volume</strong> $C_{x, y, l}$と呼んでいる</li>
+<li>cost volumeを、元画像をガイドとしてGuided Filterで平滑化</li>
+<li>平滑化されたcost volumeのargminを取ることで、最終的なラベルを決定</li>
+</ol>
+<ul>
+<li>先行研究[31]では2.のcost volumeの平滑化をBilateral filterでやっており、それにより元画像のエッジが保存される結果が得られていたが、処理時間が遅かった。<br>
+本研究では、cost volumeの平滑化にGuided filterを使うことで、エッジ保存の平滑化を高速に実行できる。<br>
+（Guided filterは、積分画像を使って高速に計算可能なBox filterの組み合わせで実装できるため早い）</li>
+<li>sub-pixel精度が必要な場合
+元の画像をbicubic拡大して、sub-pixelの変位の場合のコスト関数も計算する。
+コスト関数の変位の次元は大きくなるが、座標の次元はそのまま。</li>
+</ul>
+<h1 id="処理速度">処理速度</h1>
+<ul>
+<li>1Mpix画像に対して5msec（CUDA実装）</li>
+<li>論文の処理速度はCUDA実装で測定した結果で、公開されているのはMatlab実装なのが悲しい</li>
+</ul>
+<h1 id="感想批判">感想・批判</h1>
+<ul>
+<li>[Khamis+(2018)]などで引用されていたので目を通した。</li>
+<li>Stereo matchingで、cost関数をただの差分だけに(x方向の微分の項をなくす)して、平滑化をbox filterにすると、シンプルなSADでのブロックマッチングに帰着する。それに比べて平滑化をbilateral filterとかguided filterにすると、画素値が近い周りのpixelの影響は大きくなるが、画素値が遠い周りのPixelの影響は小さくなる。このように画素値の違いで寄与を変えると、異なる奥行きの物体間の境界などでは良さそうだが、同じ物体でTextureがある時などに悪影響がありそう。実験でCG画像で精度が悪いという結果は、これが関係してそうな気がする。（学習ベースにして、単に画素値で寄与度を決めるのではなくて、同じ物体に属するかで決めると精度が上がりそう。）</li>
+<li>costにただのL1ノルムではなく、カットオフみたいなものを導入している。L2よりL1の方が外れ値に強いが、更にそれを推し進めた感じ。初めて見たが、一般的なのだろうか？</li>
+</ul>
+<h1 id="参考文献">参考文献</h1>
+<ul>
+<li><a href="https://arxiv.org/abs/1807.08865">S. Khamis et al. &ldquo;StereoNet: Guided Hierarchical Refinement for Real-Time Edge-Aware Depth Prediction&rdquo; (2018)</a></li>
+</ul>
+
+    </div>
+
+    
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/stereo-matching/">Stereo Matching</a>
+          <a href="/tags/optical-flow/">Optical Flow</a>
+          <a href="/tags/segmentation/">Segmentation</a>
+          </div>
+      <nav class="post-nav">
+        
+        <a class="next" href="/post/homebrew_on_ubuntu18/">
+            <span class="next-text nav-default">HomebrewをUbuntu18.04にインストール</span>
+            <span class="next-text nav-mobile">次の記事へ</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+  <a href="http://localhost:1313/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2020<span class="heart"><i class="iconfont icon-heart"></i></span><span>nohzen</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.c12618f9a600c40bd024996677e951e64d3487006775aeb22e200c990006c5c7.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        tags: 'ams',
+        }
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@3.0.5/es5/tex-mml-chtml.js" integrity="sha256-HGLuEfFcsUJGhvB8cQ8nr0gai9EucOOaIxFw7qxmd+w=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>
