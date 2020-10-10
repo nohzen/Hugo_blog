@@ -135,6 +135,18 @@ git push origin gh-pages
 ```
 最後の手順は毎回やるのはめんどうなので、[shellにしておく](https://github.com/nohzen/Hugo_blog/blob/main/publish_to_ghpages.sh)。
 
+## baseURLにsubdirectoryがある場合に画像のリンクが正しくない問題
+`config.toml`のURLが以下のようにsubdirectoryを含む場合に画像のリンクがおかしくなり、画像が表示されない。
+```config.toml
+baseURL = "https://nohzen.github.io/Hugo_blog"
+```
+
+とりえあず、[こちら](https://discourse.gohugo.io/t/best-way-to-reference-an-image-in-static-directory-when-baseurl-could-contain-a-sub-directory/15461/2)を参考に
+```config.toml
+CanonifyURLs=true
+```
+を`config.toml`に追加してURLを絶対Pathにすることで画像が表示されるようになった。
+`canonifyURLs`はdupricateらしいので、あまり良い解決策では無さそう。
 
 ## 参考
 - https://gohugo.io/getting-started/installing
