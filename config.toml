@@ -1,3 +1,4 @@
+CanonifyURLs=true
 baseURL = "https://nohzen.github.io/Hugo_blog"
 # baseURL = "http://localhost:1313/"
 languageCode = "ja"
