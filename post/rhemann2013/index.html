@@ -16,7 +16,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
 
 
-<meta name="author" content="nohzen" /><meta name="description" content="概要 Stereo matching, optuical flow, interactive segmentationなどをラベル問題として定式化 コスト関数の平滑化にGuided Filterを用いることで、精度を落とさず" /><meta name="keywords" content="Hugo, theme, even" />
+<meta name="author" content="nohzen" /><meta name="description" content="論文情報 C. Rhemann et al. &amp;ldquo;Fast Cost-Volume Filtering for Visual Correspondence and Beyond (2013)&amp;quot; リンク 論文website 公式Matlabの実装が公開。論文に依ると、CUDA実装もしたみたいだが、非公開。" /><meta name="keywords" content="Hugo, theme, even" />
 
 
 
@@ -40,23 +40,23 @@
 
 
 <meta property="og:title" content="Fast Cost-Volume Filtering for Visual Correspondence and Beyond" />
-<meta property="og:description" content="概要 Stereo matching, optuical flow, interactive segmentationなどをラベル問題として定式化 コスト関数の平滑化にGuided Filterを用いることで、精度を落とさず" />
+<meta property="og:description" content="論文情報 C. Rhemann et al. &ldquo;Fast Cost-Volume Filtering for Visual Correspondence and Beyond (2013)&quot; リンク 論文website 公式Matlabの実装が公開。論文に依ると、CUDA実装もしたみたいだが、非公開。" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://nohzen.github.io/Hugo_blog/post/rhemann2013/" />
 <meta property="article:published_time" content="2020-10-04T17:15:50+09:00" />
 <meta property="article:modified_time" content="2020-10-04T17:15:50+09:00" />
 <meta itemprop="name" content="Fast Cost-Volume Filtering for Visual Correspondence and Beyond">
-<meta itemprop="description" content="概要 Stereo matching, optuical flow, interactive segmentationなどをラベル問題として定式化 コスト関数の平滑化にGuided Filterを用いることで、精度を落とさず">
+<meta itemprop="description" content="論文情報 C. Rhemann et al. &ldquo;Fast Cost-Volume Filtering for Visual Correspondence and Beyond (2013)&quot; リンク 論文website 公式Matlabの実装が公開。論文に依ると、CUDA実装もしたみたいだが、非公開。">
 <meta itemprop="datePublished" content="2020-10-04T17:15:50+09:00" />
 <meta itemprop="dateModified" content="2020-10-04T17:15:50+09:00" />
-<meta itemprop="wordCount" content="1760">
+<meta itemprop="wordCount" content="1775">
 
 
 
 <meta itemprop="keywords" content="Stereo Matching,Optical Flow,Segmentation," />
 <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Fast Cost-Volume Filtering for Visual Correspondence and Beyond"/>
-<meta name="twitter:description" content="概要 Stereo matching, optuical flow, interactive segmentationなどをラベル問題として定式化 コスト関数の平滑化にGuided Filterを用いることで、精度を落とさず"/>
+<meta name="twitter:description" content="論文情報 C. Rhemann et al. &ldquo;Fast Cost-Volume Filtering for Visual Correspondence and Beyond (2013)&quot; リンク 論文website 公式Matlabの実装が公開。論文に依ると、CUDA実装もしたみたいだが、非公開。"/>
 
 <!--[if lte IE 9]>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
@@ -129,12 +129,13 @@
   <div class="post-toc-content always-active">
     <nav id="TableOfContents">
   <ul>
-    <li><a href="#概要">概要</a></li>
     <li><a href="#論文情報">論文情報</a>
       <ul>
+        <li><a href="#リンク">リンク</a></li>
         <li><a href="#著者">著者</a></li>
       </ul>
     </li>
+    <li><a href="#概要">概要</a></li>
     <li><a href="#内容">内容</a>
       <ul>
         <li><a href="#stereo-matchingについて具体例">Stereo matchingについて具体例</a></li>
@@ -143,19 +144,16 @@
       </ul>
     </li>
     <li><a href="#処理速度">処理速度</a></li>
-    <li><a href="#感想批判">感想・批判</a></li>
+    <li><a href="#感想">感想</a></li>
     <li><a href="#参考文献">参考文献</a></li>
   </ul>
 </nav>
   </div>
 </div>
     <div class="post-content">
-      <h1 id="概要">概要</h1>
-<ul>
-<li>Stereo matching, optuical flow, interactive segmentationなどをラベル問題として定式化</li>
-<li>コスト関数の平滑化にGuided Filterを用いることで、精度を落とさずに高速化</li>
-</ul>
-<h1 id="論文情報">論文情報</h1>
+      <h1 id="論文情報">論文情報</h1>
+<p><a href="https://www.ims.tuwien.ac.at/publications/tuw-202088">C. Rhemann et al. &ldquo;Fast Cost-Volume Filtering for Visual Correspondence and Beyond (2013)&quot;</a></p>
+<h2 id="リンク">リンク</h2>
 <ul>
 <li><a href="https://www.ims.tuwien.ac.at/publications/tuw-202088">論文website</a>
 公式Matlabの実装が公開。論文に依ると、CUDA実装もしたみたいだが、非公開。</li>
@@ -173,10 +171,18 @@
 GrabCutの著者。<a href="https://hci.iwr.uni-heidelberg.de/vislearn/">この方の研究室</a>、最近の研究も面白そう。</li>
 <li><a href="https://www.ims.tuwien.ac.at/people/margrit-gelautz">Margrit Gelautz</a> (ウィーン工科大学)</li>
 </ul>
+<h1 id="概要">概要</h1>
+<ul>
+<li>Stereo matching, optuical flow, interactive segmentationなどをラベル問題として定式化</li>
+<li>コスト関数の平滑化にGuided Filterを用いることで、精度を落とさずに高速化</li>
+</ul>
 <h1 id="内容">内容</h1>
 <h2 id="stereo-matchingについて具体例">Stereo matchingについて具体例</h2>
 <figure class="center">
-    <img src="https://nohzen.github.io/Hugo_blog/images/rhemann2013/stereo_match.png" width="320"/> 
+    <img src="https://nohzen.github.io/Hugo_blog/images/rhemann2013/stereo_match.png"
+         alt="[Rhemann&#43;(2013)] Fig.1" width="320"/> <figcaption>
+            <p>[Rhemann+(2013)] Fig.1</p>
+        </figcaption>
 </figure>
 
 <ol>
@@ -220,7 +226,7 @@ GrabCutの著者。<a href="https://hci.iwr.uni-heidelberg.de/vislearn/">この�
 <li>1Mpix画像に対して5msec（CUDA実装）</li>
 <li>論文の処理速度はCUDA実装で測定した結果で、公開されているのはMatlab実装なのが悲しい</li>
 </ul>
-<h1 id="感想批判">感想・批判</h1>
+<h1 id="感想">感想</h1>
 <ul>
 <li>[Khamis+(2018)]などで引用されていたので目を通した。</li>
 <li>Stereo matchingで、cost関数をただの差分だけに(x方向の微分の項をなくす)して、平滑化をbox filterにすると、シンプルなSADでのブロックマッチングに帰着する。それに比べて平滑化をbilateral filterとかguided filterにすると、画素値が近い周りのpixelの影響は大きくなるが、画素値が遠い周りのPixelの影響は小さくなる。このように画素値の違いで寄与を変えると、異なる奥行きの物体間の境界などでは良さそうだが、同じ物体でTextureがある時などに悪影響がありそう。実験でCG画像で精度が悪いという結果は、これが関係してそうな気がする。（学習ベースにして、単に画素値で寄与度を決めるのではなくて、同じ物体に属するかで決めると精度が上がりそう。）</li>

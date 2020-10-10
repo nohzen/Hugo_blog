@@ -49,7 +49,7 @@
 <meta itemprop="description" content="なんとなく、はてなブログからHugoに移行した。 以下、自分用のメモ（公式ドキュメントをコピペしただけの作業ログなので、公式を見た方がいい）。">
 <meta itemprop="datePublished" content="2020-10-04T11:42:39+09:00" />
 <meta itemprop="dateModified" content="2020-10-04T11:42:39+09:00" />
-<meta itemprop="wordCount" content="995">
+<meta itemprop="wordCount" content="1209">
 
 
 
@@ -294,6 +294,27 @@ git push origin gh-pages
 </code></pre></td></tr></table>
 </div>
 </div><p>最後の手順は毎回やるのはめんどうなので、<a href="https://github.com/nohzen/Hugo_blog/blob/main/publish_to_ghpages.sh">shellにしておく</a>。</p>
+<h2 id="baseurlにsubdirectoryがある場合に画像のリンクが正しくない問題">baseURLにsubdirectoryがある場合に画像のリンクが正しくない問題</h2>
+<p><code>config.toml</code>のURLが以下のようにsubdirectoryを含む場合に画像のリンクがおかしくなり、画像が表示されない。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-config.toml" data-lang="config.toml"><span class="nx">baseURL</span> <span class="p">=</span> <span class="s2">&#34;https://nohzen.github.io/Hugo_blog&#34;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>とりえあず、<a href="https://discourse.gohugo.io/t/best-way-to-reference-an-image-in-static-directory-when-baseurl-could-contain-a-sub-directory/15461/2">こちら</a>を参考に</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-config.toml" data-lang="config.toml"><span class="nx">CanonifyURLs</span><span class="p">=</span><span class="kc">true</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>を<code>config.toml</code>に追加してURLを絶対Pathにすることで画像が表示されるようになった。
+<code>canonifyURLs</code>はdupricateらしいので、あまり良い解決策では無さそう。</p>
 <h2 id="参考">参考</h2>
 <ul>
 <li><a href="https://gohugo.io/getting-started/installing">https://gohugo.io/getting-started/installing</a></li>
