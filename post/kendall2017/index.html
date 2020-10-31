@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Goemetry and Context Network (GC-Net) - memo</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="nohzen" /><meta name="description" content="論文情報 A. Kendall et al. &amp;ldquo;End-to-End Learning of Geometry and Context for Deep Stereo Regression&amp;rdquo; (2017) リンク ICCV2017 open access ICCV2017 oral 野良実装（著者実装はなさそう） https://github.com/kelkelcheng/GC-Net-Tensorflow https://github.com/Jiankai-Sun/GC-Net https://github.com/zyf12389/GC-Net https://github.com/laoreja/CS231A-project-Stereo-matching https://github.com/EnriqueSolarte/GC-Net-tensorflow 著者 Skydio Inc.というドローンを作っている会社の" /><meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.75.1 with theme even" />
+
+
+<link rel="canonical" href="https://nohzen.github.io/Hugo_blog/post/kendall2017/" />
+<link rel="apple-touch-icon" sizes="180x180" href="https://nohzen.github.io/Hugo_blog/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://nohzen.github.io/Hugo_blog/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="https://nohzen.github.io/Hugo_blog/favicon-16x16.png">
+<link rel="manifest" href="https://nohzen.github.io/Hugo_blog/manifest.json">
+<link rel="mask-icon" href="https://nohzen.github.io/Hugo_blog/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="https://nohzen.github.io/Hugo_blog/sass/main.min.c7bc1becf36bcf6a9ebd25d2947e43a2eb745ddb0c9a32b43126fd7fa460c351.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="Goemetry and Context Network (GC-Net)" />
+<meta property="og:description" content="論文情報 A. Kendall et al. &ldquo;End-to-End Learning of Geometry and Context for Deep Stereo Regression&rdquo; (2017) リンク ICCV2017 open access ICCV2017 oral 野良実装（著者実装はなさそう） https://github.com/kelkelcheng/GC-Net-Tensorflow https://github.com/Jiankai-Sun/GC-Net https://github.com/zyf12389/GC-Net https://github.com/laoreja/CS231A-project-Stereo-matching https://github.com/EnriqueSolarte/GC-Net-tensorflow 著者 Skydio Inc.というドローンを作っている会社の" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://nohzen.github.io/Hugo_blog/post/kendall2017/" />
+<meta property="article:published_time" content="2020-10-26T01:01:31+09:00" />
+<meta property="article:modified_time" content="2020-10-26T01:01:31+09:00" />
+<meta itemprop="name" content="Goemetry and Context Network (GC-Net)">
+<meta itemprop="description" content="論文情報 A. Kendall et al. &ldquo;End-to-End Learning of Geometry and Context for Deep Stereo Regression&rdquo; (2017) リンク ICCV2017 open access ICCV2017 oral 野良実装（著者実装はなさそう） https://github.com/kelkelcheng/GC-Net-Tensorflow https://github.com/Jiankai-Sun/GC-Net https://github.com/zyf12389/GC-Net https://github.com/laoreja/CS231A-project-Stereo-matching https://github.com/EnriqueSolarte/GC-Net-tensorflow 著者 Skydio Inc.というドローンを作っている会社の">
+<meta itemprop="datePublished" content="2020-10-26T01:01:31+09:00" />
+<meta itemprop="dateModified" content="2020-10-26T01:01:31+09:00" />
+<meta itemprop="wordCount" content="3142">
+
+
+
+<meta itemprop="keywords" content="Stereo Matching," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Goemetry and Context Network (GC-Net)"/>
+<meta name="twitter:description" content="論文情報 A. Kendall et al. &ldquo;End-to-End Learning of Geometry and Context for Deep Stereo Regression&rdquo; (2017) リンク ICCV2017 open access ICCV2017 oral 野良実装（著者実装はなさそう） https://github.com/kelkelcheng/GC-Net-Tensorflow https://github.com/Jiankai-Sun/GC-Net https://github.com/zyf12389/GC-Net https://github.com/laoreja/CS231A-project-Stereo-matching https://github.com/EnriqueSolarte/GC-Net-tensorflow 著者 Skydio Inc.というドローンを作っている会社の"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="https://nohzen.github.io/Hugo_blog/" class="logo">memo</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="https://nohzen.github.io/Hugo_blog/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="https://nohzen.github.io/Hugo_blog/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="https://nohzen.github.io/Hugo_blog/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="https://nohzen.github.io/Hugo_blog/" class="logo">memo</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="https://nohzen.github.io/Hugo_blog/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="https://nohzen.github.io/Hugo_blog/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="https://nohzen.github.io/Hugo_blog/tags/">Tags</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Goemetry and Context Network (GC-Net)</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2020-10-26 </span>
+        
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">コンテンツ</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#論文情報">論文情報</a>
+      <ul>
+        <li><a href="#リンク">リンク</a></li>
+        <li><a href="#著者">著者</a></li>
+      </ul>
+    </li>
+    <li><a href="#概要">概要</a></li>
+    <li><a href="#内容">内容</a>
+      <ul>
+        <li><a href="#背景">背景</a></li>
+        <li><a href="#ネットワーク構造">ネットワーク構造</a>
+          <ul>
+            <li><a href="#特徴量抽出">特徴量抽出</a></li>
+            <li><a href="#cost-volume">Cost volume</a></li>
+            <li><a href="#cost-volumeの正則化refinement">cost volumeの正則化/refinement</a></li>
+            <li><a href="#argmin">argmin</a></li>
+            <li><a href="#loss">Loss</a></li>
+          </ul>
+        </li>
+        <li><a href="#実験">実験</a></li>
+      </ul>
+    </li>
+    <li><a href="#感想">感想</a></li>
+    <li><a href="#参考文献">参考文献</a></li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <h1 id="論文情報">論文情報</h1>
+<p><a href="https://arxiv.org/abs/1703.04309">A. Kendall et al. &ldquo;End-to-End Learning of Geometry and Context for Deep Stereo Regression&rdquo; (2017)</a></p>
+<h2 id="リンク">リンク</h2>
+<ul>
+<li><a href="https://openaccess.thecvf.com/content_iccv_2017/html/Kendall_End-To-End_Learning_of_ICCV_2017_paper.html">ICCV2017 open access</a></li>
+<li><a href="https://www.youtube.com/watch?v=VtAzDS1NLmo">ICCV2017 oral</a></li>
+</ul>
+<p>野良実装（著者実装はなさそう）</p>
+<ul>
+<li><a href="https://github.com/kelkelcheng/GC-Net-Tensorflow">https://github.com/kelkelcheng/GC-Net-Tensorflow</a></li>
+<li><a href="https://github.com/Jiankai-Sun/GC-Net">https://github.com/Jiankai-Sun/GC-Net</a></li>
+<li><a href="https://github.com/zyf12389/GC-Net">https://github.com/zyf12389/GC-Net</a></li>
+<li><a href="https://github.com/laoreja/CS231A-project-Stereo-matching">https://github.com/laoreja/CS231A-project-Stereo-matching</a></li>
+<li><a href="https://github.com/EnriqueSolarte/GC-Net-tensorflow">https://github.com/EnriqueSolarte/GC-Net-tensorflow</a></li>
+</ul>
+<h2 id="著者">著者</h2>
+<p><a href="https://www.skydio.com/">Skydio Inc.</a>というドローンを作っている会社のメンバー</p>
+<ul>
+<li><a href="https://alexgkendall.com/">Alex Kendall</a>: 現University of Cambridge、SegNetやPoseNetの著者</li>
+<li><a href="http://people.csail.mit.edu/abachrac/pmwiki/">Abraham Bachrach</a>: skydio CTO, 他にもVOの論文とかあり</li>
+<li><a href="">Adam Bry</a>: skydio CEO
+他: Hayk Martirosyan, Saumitro Dasgupta, Peter Henry, Ryan Kennedy</li>
+</ul>
+<h1 id="概要">概要</h1>
+<p><strong>Goemetry and Context Network (GC-Net)</strong> と呼ばれるStereo matchingを行うDeepLearning手法を提案した。<br>
+<strong>GC-Net</strong>は以下のような特徴がある。</p>
+<ul>
+<li><strong>End to end</strong>に学習できる</li>
+<li>Goemetry: 視差推定の問題の構造を利用するために、<strong>cost volume</strong>を使う</li>
+<li>Context: cost volumeの正則化に<strong>3D conv</strong>を利用し、semanticな情報も学習する</li>
+<li>視差は<strong>soft argmin</strong>を使ってcost volumeから<strong>回帰する</strong></li>
+</ul>
+<h1 id="内容">内容</h1>
+<h2 id="背景">背景</h2>
+<p>既存のDeep learningを使ったStereo matching手法はEnd to endではなく、特徴量を作るところだけがDLで、正則化や後処理は古典的な方法を使っていた。
+(正則化: stereo matchingのエネルギーに平滑化項を入れる / cost volume filteringの平滑化のためのfilter)<br>
+本研究では、古典的なstereo matching手法に含まれる各要素を微分可能なLayerにすることで、End to endに学習できるDL法モデルを提案。
+cost volumeを使うという点でstereo matchingの問題の構造を取り入れつつ、DLを使うことでsemanticな情報/contextを利用できるのが強み。<br>
+新規性は以下の2点:</p>
+<ul>
+<li>高さx幅x視差の3次元のcost volumeを3D convで正則化</li>
+<li>soft argmin: 微分可能で学習でき、cost volumeからsub-pixel精度で視差を回帰できる</li>
+</ul>
+<h2 id="ネットワーク構造">ネットワーク構造</h2>
+<figure class="center">
+    <img src="https://nohzen.github.io/Hugo_blog/images/kendall2017/Fig1.png"
+         alt="[Kendall&#43;(2017)] Fig.1" width="1213"/> <figcaption>
+            <p>[Kendall+(2017)] Fig.1</p>
+        </figcaption>
+</figure>
+
+<h3 id="特徴量抽出">特徴量抽出</h3>
+<p>Cost volume filtering [Rhemann+(2013)]などの非DL系の手法では、画素値を特徴量としてcost volumeを作ることが多い。<br>
+一方、本研究では画素値そのものではなく、画素値に畳み込みをかけたものを特徴量としてcost volumeを計算する。
+こうすることで、画像の明るさの変化に強くなり、局所的なcontextを利用できる。
+特徴量を計算するCNNの重みは、<strong>左右の画像で共有</strong>する。</p>
+<h3 id="cost-volume">Cost volume</h3>
+<p>2枚の画像から計算された特徴量(高さx幅x特徴量)を<strong>concate</strong>して高さx幅x視差x特徴量のcost volumeを作る。
+他にも、特徴量の次元について引いたり、特徴量間の距離を使ってcost volumeを作る方法も考えられる。
+[Rhemann+(2013)]などの非DL系の手法では特徴量(画素値)の引き算をしている。[32]では特徴量の次元については内積をして潰している。<br>
+<strong>特徴量間の距離などを使うと、相対的な表現しか学習できず、絶対的な特徴量がcost volumeの正則化で使えない</strong>。
+一方、concateするとcost volumeで絶対的な特徴量が使え、semanticな情報を学習できる。</p>
+<h3 id="cost-volumeの正則化refinement">cost volumeの正則化/refinement</h3>
+<p>[Rhemann+(2013)]では空間方向にしかfilterしないが、<strong>3D convを使うことで空間方向に加えて視差方向にも学習</strong>できる。
+ただし、3D convは計算量が多いので、<strong>Encoder-Decoder構造</strong>(空間+視差の次元を4回縮小)を使う。
+最後の畳み込みで元解像度になるようにUpscaleする。</p>
+<h3 id="argmin">argmin</h3>
+<p>単純にcost volumeの視差の次元についてのargminで視差を推定すると、sub-pixel精度にならない・微分可能でないので学習できない といった問題がある。<br>
+そこで以下のような<strong>soft-argmin</strong>を使うことで、sub-pixel精度の回帰ができ、微分可能で学習可能になる。
+各pixelにおいて、Cost $C(d)$のマイナスのsoftmaxをとり確率にする。それを重みとして視差を加重平均することで視差を推論する。
+$$
+\hat{d} := \sum_d d * \frac{e^{-C(d)}}{\sum_{d^{'}} e^{-C(d^{'})}}
+$$</p>
+<p>普通のargminと違い、コストがmulti-modalな形をしている場合には以下の図の(b)のように問題が起こる。
+<figure class="center">
+    <img src="https://nohzen.github.io/Hugo_blog/images/kendall2017/Fig2.png"
+         alt="[Kendall&#43;(2017)] Fig.2" width="1200"/> <figcaption>
+            <p>[Kendall+(2017)] Fig.2</p>
+        </figcaption>
+</figure>
+
+そこで、最後の3D convの後にBNを入れないことで、<strong>ネットワークがsoftmaxの「温度」を学習してpeakの鋭さをコントロール</strong>できる(統計力学のカノニカル分布と同じ形をしているので、「温度」と呼んでいる)。
+つまり、multi-modalの時にはCの絶対値が大きくなり、peakが鋭くなる。</p>
+<h3 id="loss">Loss</h3>
+<p><strong>視差のL1ノルム</strong>をLossとする。
+KITTIデータセットのLIDARのようにGTがスパースな場合もあるので、pixel数で割って平均する。<br>
+分類問題としても扱うことができるが、<strong>回帰問題</strong>として扱うことでsub-pixel精度にできる。
+また、回帰問題として定式化することで、photometric lossを使った教師なし学習も使うことができる[13]。</p>
+<h2 id="実験">実験</h2>
+<p>TensorFlowで実装、バッチサイズ1、入力サイズ:256x512、入力画素値は[-1, 1]に正規化。</p>
+<ul>
+<li>Scene Flowでモデル設計の違いを比較(Table2)
+<ul>
+<li>3D conv + 多重解像度 &gt; 3D conv single resolution &gt; 3D convなし</li>
+<li>Regression loss (soft argmin) &gt; hard classification loss (普通の分類のやり方で、cost volumeとして確率を推論し、cross entropy lossを使う) &gt; soft classification loss (Gaussian分布を学習) [32]</li>
+<li>Table2を見ると、3D convありだとregression lossの方がいいが、3D convなしだとclassification lossの方がいい（理由はある？）</li>
+<li>Fig.3: Classification lossの方が学習が早く進むが、最終的な精度はregression lossの方がいい</li>
+</ul>
+</li>
+<li>KITTIで先行研究と比較(Table3)
+<ul>
+<li>KITTIはScene FlowでPretrain(学習データが十分にないので)</li>
+<li>先行研究より高性能で処理速度も早い(Table3に処理速度の比較あり)</li>
+<li>End to end, regression loss, 3D convが効いていると考察</li>
+</ul>
+</li>
+<li>Model saliencyの考察
+<ul>
+<li>[51]の方法を使って、有効的な受容野を可視化</li>
+</ul>
+</li>
+</ul>
+<h1 id="感想">感想</h1>
+<ul>
+<li>DLを使ったStereo Matchingの論文ではトップクラスに引用数が多く、後の研究でよく比較されている。</li>
+<li>非DL系の有名手法であるCost volume filtering [Rhemann+(2013)]を真っ当に学習可能にしたという感じ。
+<ul>
+<li>ただし、cost volumeの正則化(filtering)を視差の足について独立に行うのではなく、3D convにしているあたりは工夫がなされている。</li>
+<li>cost volumeを使うとしても、3D conv, soft argminあたりは他のやり方もありそう。</li>
+</ul>
+</li>
+<li>Lossに単純なL1を使っているが、smooth L1とかにすると精度が上がったりしないだろうか</li>
+<li>ClassificationとRegressionの比較は面白い
+<ul>
+<li>Table2によると、3D conv + 多重解像度ではregression lossの方が精度が高かったみたいだが、3D convなしではclassification lossの方が精度が高いみたい。論文の本文でそれについての言及がなかったが、理由などが気になる。</li>
+<li>また、3D conv + 多重解像度では、classification lossの方が学習が早く進み、regression lossの方が精度が高いというのも不思議で理由が気になる。</li>
+<li>単眼のDepth推定では、Ordinal Regressionみたいなclassification的に扱った方が精度が上がるという話もあった気がする。</li>
+</ul>
+</li>
+</ul>
+<h1 id="参考文献">参考文献</h1>
+<p>review:</p>
+<ul>
+<li>[39] D. Scharstein et al. &ldquo;A Taxonomy and Evaluation of Dense Two-Frame Stereo Correspondence Algorithms&rdquo; (2002)</li>
+<li>[43] F. Tombari et al. &ldquo;Classification and evaluation of cost aggregation methods for stereo correspondence&rdquo; (2008)</li>
+</ul>
+<p>Patch baseの先行研究:</p>
+<ul>
+<li>[32] W. Luo et al. &ldquo;Efficient deep learning for stereo matching&rdquo; (2016): soft classification lossを利用</li>
+<li>[34] N. Mayer et al. &ldquo;A Large Dataset to Train Convolutional Networks for Disparity, Optical Flow, and Scene Flow Estimation&rdquo; (2015):  E2E, regrssion loss, 1D correlation layer</li>
+</ul>
+<p>非DL:</p>
+<ul>
+<li><a href="https://www.ims.tuwien.ac.at/publications/tuw-202088">C. Rhemann et al. &ldquo;Fast Cost-Volume Filtering for Visual Correspondence and Beyond&rdquo; (2013)</a>  前提知識</li>
+</ul>
+
+    </div>
+
+    
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="https://nohzen.github.io/Hugo_blog/tags/stereo-matching/">Stereo Matching</a>
+          </div>
+      <nav class="post-nav">
+        
+        <a class="next" href="https://nohzen.github.io/Hugo_blog/post/rhemann2013/">
+            <span class="next-text nav-default">Fast Cost-Volume Filtering for Visual Correspondence and Beyond</span>
+            <span class="next-text nav-mobile">次の記事へ</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+  <a href="https://nohzen.github.io/Hugo_blog/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2020<span class="heart"><i class="iconfont icon-heart"></i></span><span>nohzen</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="https://nohzen.github.io/Hugo_blog/js/main.min.c12618f9a600c40bd024996677e951e64d3487006775aeb22e200c990006c5c7.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        tags: 'ams',
+        }
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@3.0.5/es5/tex-mml-chtml.js" integrity="sha256-HGLuEfFcsUJGhvB8cQ8nr0gai9EucOOaIxFw7qxmd+w=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

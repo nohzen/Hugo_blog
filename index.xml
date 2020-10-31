@@ -6,14 +6,23 @@
     <description>Recent content on memo</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
-    <lastBuildDate>Sun, 04 Oct 2020 17:15:50 +0900</lastBuildDate><atom:link href="https://nohzen.github.io/Hugo_blog/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 26 Oct 2020 01:01:31 +0900</lastBuildDate><atom:link href="https://nohzen.github.io/Hugo_blog/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Goemetry and Context Network (GC-Net)</title>
+      <link>https://nohzen.github.io/Hugo_blog/post/kendall2017/</link>
+      <pubDate>Mon, 26 Oct 2020 01:01:31 +0900</pubDate>
+      
+      <guid>https://nohzen.github.io/Hugo_blog/post/kendall2017/</guid>
+      <description>論文情報 A. Kendall et al. &amp;ldquo;End-to-End Learning of Geometry and Context for Deep Stereo Regression&amp;rdquo; (2017) リンク ICCV2017 open access ICCV2017 oral 野良実装（著者実装はなさそう） https://github.com/kelkelcheng/GC-Net-Tensorflow https://github.com/Jiankai-Sun/GC-Net https://github.com/zyf12389/GC-Net https://github.com/laoreja/CS231A-project-Stereo-matching https://github.com/EnriqueSolarte/GC-Net-tensorflow 著者 Skydio Inc.というドローンを作っている会社の</description>
+    </item>
+    
     <item>
       <title>Fast Cost-Volume Filtering for Visual Correspondence and Beyond</title>
       <link>https://nohzen.github.io/Hugo_blog/post/rhemann2013/</link>
       <pubDate>Sun, 04 Oct 2020 17:15:50 +0900</pubDate>
       
       <guid>https://nohzen.github.io/Hugo_blog/post/rhemann2013/</guid>
-      <description>論文情報 C. Rhemann et al. &amp;ldquo;Fast Cost-Volume Filtering for Visual Correspondence and Beyond (2013)&amp;quot; リンク 論文website 公式Matlabの実装が公開。論文に依ると、CUDA実装もしたみたいだが、非公開。</description>
+      <description>論文情報 C. Rhemann et al. &amp;ldquo;Fast Cost-Volume Filtering for Visual Correspondence and Beyond&amp;rdquo; (2013) リンク 論文website 公式Matlabの実装が公開。論文に依ると、CUDA実装もしたみたいだが、非公開。</description>
     </item>
     
     <item>

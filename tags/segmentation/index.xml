@@ -13,7 +13,7 @@
       <pubDate>Sun, 04 Oct 2020 17:15:50 +0900</pubDate>
       
       <guid>https://nohzen.github.io/Hugo_blog/post/rhemann2013/</guid>
-      <description>論文情報 C. Rhemann et al. &amp;ldquo;Fast Cost-Volume Filtering for Visual Correspondence and Beyond (2013)&amp;quot; リンク 論文website 公式Matlabの実装が公開。論文に依ると、CUDA実装もしたみたいだが、非公開。</description>
+      <description>論文情報 C. Rhemann et al. &amp;ldquo;Fast Cost-Volume Filtering for Visual Correspondence and Beyond&amp;rdquo; (2013) リンク 論文website 公式Matlabの実装が公開。論文に依ると、CUDA実装もしたみたいだが、非公開。</description>
     </item>
     
   </channel>
