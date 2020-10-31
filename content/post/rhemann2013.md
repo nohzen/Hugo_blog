@@ -10,7 +10,7 @@ mathjaxEnableSingleDollar: true
 mathjaxEnableAutoNumber: true
 ---
 # 論文情報
-[C. Rhemann et al. "Fast Cost-Volume Filtering for Visual Correspondence and Beyond (2013)"](https://www.ims.tuwien.ac.at/publications/tuw-202088)
+[C. Rhemann et al. "Fast Cost-Volume Filtering for Visual Correspondence and Beyond" (2013)](https://www.ims.tuwien.ac.at/publications/tuw-202088)
 
 ## リンク
 - [論文website](https://www.ims.tuwien.ac.at/publications/tuw-202088)
