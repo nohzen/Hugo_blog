@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Dataset on memo</title>
+    <link>https://nohzen.github.io/Hugo_blog/tags/dataset/</link>
+    <description>Recent content in Dataset on memo</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ja</language>
+    <lastBuildDate>Mon, 02 Nov 2020 00:42:01 +0900</lastBuildDate><atom:link href="https://nohzen.github.io/Hugo_blog/tags/dataset/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>A Large Dataset to Train Convolutional Networks for Disparity, Optical Flow, and Scene Flow Estimation</title>
+      <link>https://nohzen.github.io/Hugo_blog/post/mayer2015/</link>
+      <pubDate>Mon, 02 Nov 2020 00:42:01 +0900</pubDate>
+      
+      <guid>https://nohzen.github.io/Hugo_blog/post/mayer2015/</guid>
+      <description>論文情報 N. Mayer et al. &amp;ldquo;A Large Dataset to Train Convolutional Networks for Disparity, Optical Flow, and Scene Flow Estimation&amp;rdquo; (2015) CVPR2016 リンク プロジェクトページ プロジェクトページ Youtube 著者 Optical flowで有名なフライブルク大学(Uni</description>
+    </item>
+    
+  </channel>
+</rss>

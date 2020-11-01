@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>A Large Dataset to Train Convolutional Networks for Disparity, Optical Flow, and Scene Flow Estimation - memo</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="nohzen" /><meta name="description" content="論文情報 N. Mayer et al. &amp;ldquo;A Large Dataset to Train Convolutional Networks for Disparity, Optical Flow, and Scene Flow Estimation&amp;rdquo; (2015) CVPR2016 リンク プロジェクトページ プロジェクトページ Youtube 著者 Optical flowで有名なフライブルク大学(Uni" /><meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.75.1 with theme even" />
+
+
+<link rel="canonical" href="https://nohzen.github.io/Hugo_blog/post/mayer2015/" />
+<link rel="apple-touch-icon" sizes="180x180" href="https://nohzen.github.io/Hugo_blog/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://nohzen.github.io/Hugo_blog/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="https://nohzen.github.io/Hugo_blog/favicon-16x16.png">
+<link rel="manifest" href="https://nohzen.github.io/Hugo_blog/manifest.json">
+<link rel="mask-icon" href="https://nohzen.github.io/Hugo_blog/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="https://nohzen.github.io/Hugo_blog/sass/main.min.c7bc1becf36bcf6a9ebd25d2947e43a2eb745ddb0c9a32b43126fd7fa460c351.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="A Large Dataset to Train Convolutional Networks for Disparity, Optical Flow, and Scene Flow Estimation" />
+<meta property="og:description" content="論文情報 N. Mayer et al. &ldquo;A Large Dataset to Train Convolutional Networks for Disparity, Optical Flow, and Scene Flow Estimation&rdquo; (2015) CVPR2016 リンク プロジェクトページ プロジェクトページ Youtube 著者 Optical flowで有名なフライブルク大学(Uni" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://nohzen.github.io/Hugo_blog/post/mayer2015/" />
+<meta property="article:published_time" content="2020-11-02T00:42:01+09:00" />
+<meta property="article:modified_time" content="2020-11-02T00:42:01+09:00" />
+<meta itemprop="name" content="A Large Dataset to Train Convolutional Networks for Disparity, Optical Flow, and Scene Flow Estimation">
+<meta itemprop="description" content="論文情報 N. Mayer et al. &ldquo;A Large Dataset to Train Convolutional Networks for Disparity, Optical Flow, and Scene Flow Estimation&rdquo; (2015) CVPR2016 リンク プロジェクトページ プロジェクトページ Youtube 著者 Optical flowで有名なフライブルク大学(Uni">
+<meta itemprop="datePublished" content="2020-11-02T00:42:01+09:00" />
+<meta itemprop="dateModified" content="2020-11-02T00:42:01+09:00" />
+<meta itemprop="wordCount" content="2689">
+
+
+
+<meta itemprop="keywords" content="Stereo Matching,Optical Flow,Scene Flow,Dataset," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="A Large Dataset to Train Convolutional Networks for Disparity, Optical Flow, and Scene Flow Estimation"/>
+<meta name="twitter:description" content="論文情報 N. Mayer et al. &ldquo;A Large Dataset to Train Convolutional Networks for Disparity, Optical Flow, and Scene Flow Estimation&rdquo; (2015) CVPR2016 リンク プロジェクトページ プロジェクトページ Youtube 著者 Optical flowで有名なフライブルク大学(Uni"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="https://nohzen.github.io/Hugo_blog/" class="logo">memo</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="https://nohzen.github.io/Hugo_blog/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="https://nohzen.github.io/Hugo_blog/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="https://nohzen.github.io/Hugo_blog/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="https://nohzen.github.io/Hugo_blog/" class="logo">memo</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="https://nohzen.github.io/Hugo_blog/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="https://nohzen.github.io/Hugo_blog/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="https://nohzen.github.io/Hugo_blog/tags/">Tags</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">A Large Dataset to Train Convolutional Networks for Disparity, Optical Flow, and Scene Flow Estimation</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2020-11-02 </span>
+        
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">コンテンツ</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#論文情報">論文情報</a>
+      <ul>
+        <li><a href="#リンク">リンク</a></li>
+        <li><a href="#著者">著者</a></li>
+      </ul>
+    </li>
+    <li><a href="#概要">概要</a></li>
+    <li><a href="#内容">内容</a>
+      <ul>
+        <li><a href="#sceneflow">SceneFlow</a></li>
+        <li><a href="#データセット">データセット</a></li>
+        <li><a href="#ネットワーク">ネットワーク</a></li>
+        <li><a href="#実験">実験</a></li>
+      </ul>
+    </li>
+    <li><a href="#感想">感想</a></li>
+    <li><a href="#参考文献">参考文献</a></li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <h1 id="論文情報">論文情報</h1>
+<p><a href="https://arxiv.org/abs/1512.02134">N. Mayer et al. &ldquo;A Large Dataset to Train Convolutional Networks for Disparity, Optical Flow, and Scene Flow Estimation&rdquo; (2015) CVPR2016</a></p>
+<h2 id="リンク">リンク</h2>
+<ul>
+<li><a href="https://lmb.informatik.uni-freiburg.de/Publications/2016/MIFDB16/">プロジェクトページ</a></li>
+<li><a href="https://lmb.informatik.uni-freiburg.de/projects/synthetic-data/">プロジェクトページ</a></li>
+<li><a href="https://www.youtube.com/watch?v=1iAQp6KmhE4">Youtube</a></li>
+</ul>
+<h2 id="著者">著者</h2>
+<p>Optical flowで有名な<a href="https://lmb.informatik.uni-freiburg.de/index.php">フライブルク大学(University of Freiburg)のComputer Vision Group</a>のメンバーとVisual SLAMで有名な<a href="https://vision.in.tum.de/home">ミュンヘン工科大学(TUM, Technical University of Munich)のComputer Vision Group</a>のメンバー</p>
+<ul>
+<li><a href="https://lmb.informatik.uni-freiburg.de/people/mayern/">Nikolaus Mayer</a> FlowNet2など</li>
+<li><a href="https://lmb.informatik.uni-freiburg.de/people/ilge/">ddy Ilg</a> FlowNet1, 2など</li>
+<li><a href="https://vision.in.tum.de/members/haeusser">Philip Häusser</a> FlowNetなど</li>
+<li><a href="https://lmb.informatik.uni-freiburg.de/people/fischer/">Philipp Fischer</a> FlowNetなど</li>
+<li><a href="https://vision.in.tum.de/members/cremers">Daniel Cremers</a> ミュンヘン工科大のボス。LSD-SLAM, FlowNet, DSOなど。</li>
+<li><a href="https://lmb.informatik.uni-freiburg.de/people/dosovits/">Alexey Dosovitskiy</a> FlowNet1, 2など</li>
+<li><a href="https://lmb.informatik.uni-freiburg.de/people/brox/">Thomas Brox</a> フライブルク大のグループのボス。Unet, Horn-schunkベースのOptical flow, FlowNetなど。</li>
+</ul>
+<h1 id="概要">概要</h1>
+<ul>
+<li><strong>Scene Flow</strong>と呼ばれるOptical flow・視差・Scene flowのデータセットを作成</li>
+<li>既存の視差・Scene flow推定のデータセットはCNNを学習できるほど大規模なものが無かったが、このデータセットでCNNの学習が可能になった</li>
+<li>Blenderを使った合成画像のデータセット</li>
+</ul>
+<h1 id="内容">内容</h1>
+<h2 id="sceneflow">SceneFlow</h2>
+<ul>
+<li><strong>Scene flow</strong>はstereo video/RGBD videoに写っている場所の(Depth/3D positionと)3D motionを推定するタスク。</li>
+<li>Scene flowは、視差とOptical flow(とdisparity change)の推定結果から求めることができる。ただし、カメラの内部・外部パラメータが与えられている時のみ計算可能。(disparity changeは視差の時間変化のこと)</li>
+<li>disparity changeはほぼ冗長な情報だが、視差とOptical flowだけではOcclutionがある領域でScene flowが推定できないのに対して、disparity changeがあると推定できる。</li>
+<li>また、視差とOptical flowだけだと、Optical flowの小さい変化でも3D motionは大きく変化しうるのでノイズに弱いが、disparity changeを使うとノイズに強くなる。</li>
+</ul>
+<h2 id="データセット">データセット</h2>
+<figure class="center">
+    <img src="https://nohzen.github.io/Hugo_blog/images/mayer2015/table1.png"
+         alt="[N. Mayer&#43;(2015)] Table 1より引用。" width="920"/> <figcaption>
+            <p>[N. Mayer+(2015)] Table 1より引用。</p>
+        </figcaption>
+</figure>
+
+<ul>
+<li>既存のデータセット
+<ul>
+<li>Middlebury[1, 21, 22]: 視差推定は実シーン、Optical flowは実シーンと合成画像、データ数は少ない。</li>
+<li>MPI sintel[2]: すべて合成画像、元々はOptical flowだけだったが、視差も追加された。motion blurや曇りなどの画像劣化も加えている</li>
+<li>KITTI 2012, 2015[8, 17]: Optical flowと視差。車載laser scannerから作成しているのでデータがスパース(一部のPixelでしかGTがない)。</li>
+<li>Flying chair[4]: optical flow用の合成画像データ。CNNが学習できるだけの量がある</li>
+</ul>
+</li>
+<li>提案データセットはすべて合成画像で、データ数が多く、Optical flow・視差・disparity change・Segmentation・motion boundary + カメラパラメータのGTがある。</li>
+<li>作成方法: <strong>Blender</strong>を改造して、ステレオRGB画像やOptical flow、視差、Disparity changeも出力
+<ul>
+<li>optical flow: 3D motionを画像面に射影</li>
+<li>視差: 3D positionから得られるdepthからカメラパラメータを使って計算</li>
+<li>disparity change: 3D motionのdepth成分から計算</li>
+<li>Segmentation: オブジェクトの種類</li>
+<li>motion boundary: 異なるオブジェクト間の境界で、一定以上の動きの違いで、一定以上の大きさがあるもの</li>
+</ul>
+</li>
+<li>3Dのデータから生成しているので、隠れがある領域でもdisparity changeなどのGTが作れる</li>
+<li>Sintelと同様に<code>clean pass</code>と<code>final pass</code>(ボケ・motion blur・太陽グレア・輝度変化などの画像劣化を加えたもの)の2つを用意</li>
+<li>そのままだとサイズが大きくなりすぎるので、RGB画像はWebPに、非RGB画像はLZOに</li>
+<li><strong>3つのサブデータセット</strong>を作成
+<ul>
+<li><strong>FlyingThings3D</strong>: 色々なオブジェクトがランダムな動きをしているデータセット。
+200種類の背景シーン・36000種類の3D modelオブジェクト(ShapeNetデータベースから)・TextureはImageMagick・Flickr・ImageAfterから作成。
+3D modelやTextureはTrainとTestで混ざらないように分けている。
+5-20個のオブジェクトをランダムに選択・ランダムにTextureをつける・ランダムにスケール・ランダムに動かすことで作成。
+<figure class="center">
+    <img src="https://nohzen.github.io/Hugo_blog/images/mayer2015/fig3.png"
+         alt="[N. Mayer&#43;(2015)] Fig.3より引用。下3列はそれぞれ、Optical flow・視差・disparity change" width="430"/> <figcaption>
+            <p>[N. Mayer+(2015)] Fig.3より引用。下3列はそれぞれ、Optical flow・視差・disparity change</p>
+        </figcaption>
+</figure>
+</li>
+<li><strong>Monkaa</strong>: &ldquo;Monkaa&quot;というオープンソースのBlenderアニメから作成。毛やソフトな物体が含まれる。
+<figure class="center">
+    <img src="https://nohzen.github.io/Hugo_blog/images/mayer2015/fig1.png"
+         alt="[N. Mayer&#43;(2015)] Fig.1より引用。下列はそれぞれ、Optical flow・視差・disparity change" width="320"/> <figcaption>
+            <p>[N. Mayer+(2015)] Fig.1より引用。下列はそれぞれ、Optical flow・視差・disparity change</p>
+        </figcaption>
+</figure>
+</li>
+<li><strong>Driving</strong>: 自然な車載カメラのシーンで、KITTIを意識して作成。</li>
+</ul>
+</li>
+</ul>
+<h2 id="ネットワーク">ネットワーク</h2>
+<ul>
+<li>Optical flow推定は<strong>FlowNet</strong>[4]を踏襲(Encoder-Decoder構造)</li>
+<li>視差推定は<strong>DispNet/DispNetCorr</strong>の2つのネットワークを提案。Table 2にあるようにEncoder-Decoder構造のCNN。</li>
+<li>Scene flow推定(<strong>SceneFlowNet</strong>)は、事前学習したOptical flow推定と視差推定のネットワークを組み合わせてfine-tuningする。加えて、disparity changeも学習。</li>
+<li>実装はCaffe</li>
+</ul>
+<h2 id="実験">実験</h2>
+<ul>
+<li>視差推定 (Table3)
+<ul>
+<li>FlyingThings3Dで学習しただけのものと、KITTIでfine-tuningしたもの(表で-Kとついているモデル)
+<ul>
+<li>当然、KITTIではfine-tuningしたモデルの方が精度が良く、他のデータセットではKITTIでfine-tuningしない方が精度がいい</li>
+</ul>
+</li>
+<li>処理速度: KITTIの解像度でGPUで15fps</li>
+<li>KITTIでは、SGMとMC-CNN[28]と比較。MC-CNN[28]と同程度の精度
+<ul>
+<li>SOTAのモデル(MC-CNN[28])と精度は同等で1000倍早い</li>
+</ul>
+</li>
+<li>Table 3によると、1D correlation layerを入れると精度が上がったり下がったりするみたい（本文では入れた方が良いと言っている？）</li>
+</ul>
+</li>
+<li>Scene Flow推定
+<ul>
+<li>定性的にはOcclutionがある領域でもdisparity changeが推定できている</li>
+<li>学習が収束してないらしい</li>
+</ul>
+</li>
+</ul>
+<h1 id="感想">感想</h1>
+<ul>
+<li>最近のDLベースのstereo matching/視差推定の論文では、標準的に使われている</li>
+<li>Optical flowとか視差みたいな実画像でGTを作るのが大変なタスク(視差はスパースで良ければKITTIみたいにLIDARとかを使う手はあるが)は、こういった合成画像を使うしかないので、実画像で使う時の汎化性能が問題になりそう。</li>
+</ul>
+<h1 id="参考文献">参考文献</h1>
+<ul>
+<li>[4] A. Dosovitskiy et al. &ldquo;FlowNet: Learning optical flow with convolutional networks&rdquo; (2015): flying chairs dataset(synthetic data of optical flow)</li>
+</ul>
+
+    </div>
+
+    
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="https://nohzen.github.io/Hugo_blog/tags/stereo-matching/">Stereo Matching</a>
+          <a href="https://nohzen.github.io/Hugo_blog/tags/optical-flow/">Optical Flow</a>
+          <a href="https://nohzen.github.io/Hugo_blog/tags/scene-flow/">Scene Flow</a>
+          <a href="https://nohzen.github.io/Hugo_blog/tags/dataset/">Dataset</a>
+          </div>
+      <nav class="post-nav">
+        
+        <a class="next" href="https://nohzen.github.io/Hugo_blog/post/kendall2017/">
+            <span class="next-text nav-default">Goemetry and Context Network (GC-Net)</span>
+            <span class="next-text nav-mobile">次の記事へ</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+  <a href="https://nohzen.github.io/Hugo_blog/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2020<span class="heart"><i class="iconfont icon-heart"></i></span><span>nohzen</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="https://nohzen.github.io/Hugo_blog/js/main.min.c12618f9a600c40bd024996677e951e64d3487006775aeb22e200c990006c5c7.js"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>
