@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>StereoNet: Guided Hierarchical Refinement for Real-Time Edge-Aware Depth Prediction - memo</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="nohzen" /><meta name="description" content="S. Khamis et al. &amp;ldquo;StereoNet: Guided Hierarchical Refinement for Real-Time Edge-Aware Depth Prediction&amp;rdquo; (2018) ECCV2018 概要 Stereo matchingを行うDNN StereoNetを提案 先行研究GC-Netと同じく、Cost volumeと" /><meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.75.1 with theme even" />
+
+
+<link rel="canonical" href="https://nohzen.github.io/Hugo_blog/post/khamis2018/" />
+<link rel="apple-touch-icon" sizes="180x180" href="https://nohzen.github.io/Hugo_blog/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://nohzen.github.io/Hugo_blog/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="https://nohzen.github.io/Hugo_blog/favicon-16x16.png">
+<link rel="manifest" href="https://nohzen.github.io/Hugo_blog/manifest.json">
+<link rel="mask-icon" href="https://nohzen.github.io/Hugo_blog/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="https://nohzen.github.io/Hugo_blog/sass/main.min.c7bc1becf36bcf6a9ebd25d2947e43a2eb745ddb0c9a32b43126fd7fa460c351.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="StereoNet: Guided Hierarchical Refinement for Real-Time Edge-Aware Depth Prediction" />
+<meta property="og:description" content="S. Khamis et al. &ldquo;StereoNet: Guided Hierarchical Refinement for Real-Time Edge-Aware Depth Prediction&rdquo; (2018) ECCV2018 概要 Stereo matchingを行うDNN StereoNetを提案 先行研究GC-Netと同じく、Cost volumeと" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://nohzen.github.io/Hugo_blog/post/khamis2018/" />
+<meta property="article:published_time" content="2020-11-03T19:49:36+09:00" />
+<meta property="article:modified_time" content="2020-11-03T19:49:36+09:00" />
+<meta itemprop="name" content="StereoNet: Guided Hierarchical Refinement for Real-Time Edge-Aware Depth Prediction">
+<meta itemprop="description" content="S. Khamis et al. &ldquo;StereoNet: Guided Hierarchical Refinement for Real-Time Edge-Aware Depth Prediction&rdquo; (2018) ECCV2018 概要 Stereo matchingを行うDNN StereoNetを提案 先行研究GC-Netと同じく、Cost volumeと">
+<meta itemprop="datePublished" content="2020-11-03T19:49:36+09:00" />
+<meta itemprop="dateModified" content="2020-11-03T19:49:36+09:00" />
+<meta itemprop="wordCount" content="4409">
+
+
+
+<meta itemprop="keywords" content="Stereo Matching," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="StereoNet: Guided Hierarchical Refinement for Real-Time Edge-Aware Depth Prediction"/>
+<meta name="twitter:description" content="S. Khamis et al. &ldquo;StereoNet: Guided Hierarchical Refinement for Real-Time Edge-Aware Depth Prediction&rdquo; (2018) ECCV2018 概要 Stereo matchingを行うDNN StereoNetを提案 先行研究GC-Netと同じく、Cost volumeと"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="https://nohzen.github.io/Hugo_blog/" class="logo">memo</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="https://nohzen.github.io/Hugo_blog/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="https://nohzen.github.io/Hugo_blog/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="https://nohzen.github.io/Hugo_blog/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="https://nohzen.github.io/Hugo_blog/" class="logo">memo</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="https://nohzen.github.io/Hugo_blog/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="https://nohzen.github.io/Hugo_blog/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="https://nohzen.github.io/Hugo_blog/tags/">Tags</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">StereoNet: Guided Hierarchical Refinement for Real-Time Edge-Aware Depth Prediction</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2020-11-03 </span>
+        
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">コンテンツ</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#概要">概要</a></li>
+    <li><a href="#論文情報">論文情報</a>
+      <ul>
+        <li><a href="#リンク">リンク</a></li>
+        <li><a href="#著者">著者</a></li>
+      </ul>
+    </li>
+    <li><a href="#内容">内容</a>
+      <ul>
+        <li><a href="#先行研究">先行研究</a></li>
+        <li><a href="#手法">手法</a>
+          <ul>
+            <li><a href="#前段-荒い視差をcost-volume-filteringで推定">前段: 荒い視差をCost volume filteringで推定</a></li>
+            <li><a href="#後段-荒い視差を入力画像をガイドとしてrefinement">後段: 荒い視差を、入力画像をガイドとしてRefinement</a></li>
+          </ul>
+        </li>
+        <li><a href="#実験">実験</a>
+          <ul>
+            <li><a href="#scene-flow">Scene Flow</a></li>
+            <li><a href="#kitti">KITTI</a></li>
+          </ul>
+        </li>
+        <li><a href="#処理時間">処理時間</a></li>
+      </ul>
+    </li>
+    <li><a href="#感想">感想</a></li>
+    <li><a href="#参考文献">参考文献</a></li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <p><a href="https://arxiv.org/abs/1807.08865">S. Khamis et al. &ldquo;StereoNet: Guided Hierarchical Refinement for Real-Time Edge-Aware Depth Prediction&rdquo; (2018) ECCV2018</a></p>
+<h1 id="概要">概要</h1>
+<ul>
+<li>Stereo matchingを行うDNN <strong>StereoNet</strong>を提案</li>
+<li>先行研究GC-Netと同じく、<strong>Cost volume</strong>と<strong>3D conv</strong>を利用</li>
+<li>GC-Netと違い、<strong>cost volumeを低解像度にして後段でRefinement</strong>をすることで、精度を保ちつつ<strong>高速化</strong></li>
+</ul>
+<h1 id="論文情報">論文情報</h1>
+<h2 id="リンク">リンク</h2>
+<ul>
+<li><a href="https://wiki.davidl.me/view/StereoNet:_Guided_Hierarchical_Refinement_for_Real-Time_Edge-Aware_Depth_Prediction">https://wiki.davidl.me/view/StereoNet:_Guided_Hierarchical_Refinement_for_Real-Time_Edge-Aware_Depth_Prediction</a></li>
+<li>野良実装(著者実装は非公開)
+<ul>
+<li><a href="https://github.com/zhixuanli/StereoNet">https://github.com/zhixuanli/StereoNet</a></li>
+<li><a href="https://github.com/meteorshowers/StereoNet-ActiveStereoNet">https://github.com/meteorshowers/StereoNet-ActiveStereoNet</a></li>
+</ul>
+</li>
+</ul>
+<h2 id="著者">著者</h2>
+<p>Googleの研究グループ</p>
+<ul>
+<li><a href="https://www.samehkhamis.com/">Sameh Khamis</a> 現Nvidia</li>
+<li><a href="http://www.seanfanello.it/">Sean Fanello</a> 現Google</li>
+<li><a href="https://www.linkedin.com/in/christoph-rhemann-75340b44/">Christoph Rhemann</a> 現Google、Cost volume filteringの著者</li>
+<li><a href="https://www.linkedin.com/in/adarshkowdle/">Adarsh Kowdle</a> 現Google、</li>
+<li>Julien Valentin 現Microsoft</li>
+<li>Shahram Izadi 現Google</li>
+</ul>
+<h1 id="内容">内容</h1>
+<h2 id="先行研究">先行研究</h2>
+<ul>
+<li>古典的な方法
+<ul>
+<li>Globalな方法: コスト関数をBelief propagationやGraph cutで最小化</li>
+<li>Localな方法: Block Matchingなど。windowが小さすぎると中にTextureが無くなり、windowが大きすぎると視差が異なる場所が含まれてエッジが鈍る。そこで、画素値が中心の画素と似ている場所のweightを大きくする。これはcost volume filtering [Rhemann+(2013)]として定式化できる。計算量はどれくらい細かい視差を求めるかに比例する。</li>
+</ul>
+</li>
+<li>Deep Learning
+<ul>
+<li>よくあるのはEncoder-Decoder Networkだが、ステレオマッチング問題の幾何学的な特徴を利用できてない。</li>
+<li>問題の構造を利用して、異なるカメラ・異なる解像度に対して再学習しなくても使えるネットワークを作る。</li>
+</ul>
+</li>
+<li>本研究は、cost volume filtering [Rhemann+(2013)]をDLにした手法[GC-Net]をベースとする。
+<ul>
+<li>[GC-Net]と同じ点:
+<ul>
+<li>End to end</li>
+<li>Cost volumeで定式化</li>
+<li>Cost volumeのための特徴量も学習</li>
+<li>Cost volumeを3D convで正則化</li>
+<li>soft argminで視差推定</li>
+</ul>
+</li>
+<li>[GC-Net]と異なる点(カッコ内はGC-Net):
+<ul>
+<li>Cost volumeは特徴量のdiff (vs 特徴量のconcate)</li>
+<li>3D convは荒い解像度のみ (vs 3D convはEncoder-Decoder構造で)</li>
+<li>soft argminで求めた荒い視差をRefinement (vs Refinementはなし)</li>
+<li>Lossはsmooth L1系 (vs L1 Loss)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="手法">手法</h2>
+<figure class="center">
+    <img src="https://nohzen.github.io/Hugo_blog/images/khamis2018/fig1.png"
+         alt="[Khamis&#43;(2018)] Fig. 1より引用" width="1000"/> <figcaption>
+            <p>[Khamis+(2018)] Fig. 1より引用</p>
+        </figcaption>
+</figure>
+
+<h3 id="前段-荒い視差をcost-volume-filteringで推定">前段: 荒い視差をCost volume filteringで推定</h3>
+<ol>
+<li>
+<p>平行化された2枚の画像に対して特徴量を計算</p>
+<ul>
+<li>古典的な方法cost volume filtering [Rhemann+(2013)]では、画素値そのものを特徴量として使っているが、本研究ではCNNで学習したものを特徴量として使う([GC-Net]と同様)</li>
+<li>特徴量は<strong>2枚の画像で同じweight</strong>のネットワークで計算する。Textureがない領域でも機能するように、受容野を十分大きくする。</li>
+<li><strong>特徴量は低解像度</strong>(入力解像度の1/8 or 1/16)で、特徴量次元は32 ([GC-Net]は入力解像度の1/2)</li>
+</ul>
+</li>
+<li>
+<p>特徴量からcost volume(幅x高さx視差x特徴量)を構成</p>
+<ul>
+<li>古典的な方法cost volume filtering [Rhemann+(2013)]では、視差だけずらした特徴量の差でcost volumeを構成する</li>
+<li>本研究でも同様に、<strong>特徴量の差でcost volumeを構成</strong>(ただし、古典では特徴量が画素値の1次元だが、本研究では学習した32次元)</li>
+<li>[GC-Net]では、特徴量をconcateしてcost volumeを構成していた
+<ul>
+<li>[GC-Net]では差よりconcateの方が、後段に相対的な情報だけでなく絶対的な情報も伝達できるので良いと言っている</li>
+<li>本論文では、実験で差でもconcateでも精度が変わらなかったと言っているが、実験結果は掲載がなかった</li>
+</ul>
+</li>
+<li>cost volumeの解像度は特徴量と同じなので、低解像度(入力解像度の1/8 or 1/16) ([GC-Net]は入力解像度の1/2)</li>
+</ul>
+</li>
+<li>
+<p>cost volumeをFilter</p>
+<ul>
+<li>古典的な方法cost volume filtering [Rhemann+(2013)]では、空間方向にのみFilterするが、本研究では視差方向にもFilterする([GC-Net]と同様)</li>
+<li>古典的な方法と違い、Filterは<strong>3D conv</strong>で学習する([GC-Net]と同様)
+<ul>
+<li>論文では、3D convでFilterしたcostを「距離」と呼んでいる(視差を推定するためのものなので)</li>
+</ul>
+</li>
+<li><strong>3D convは一つの解像度のみで</strong>行う (cost volumeがもともと低解像度なので)
+<ul>
+<li>[GC-Net]はcost volumeが高解像度なので、計算量を節約するためにEncoder-Decoder構造で、複数の解像度で3D convを行っている</li>
+<li>本研究の実験結果によると、多くの処理時間を高解像度の3D convで費やしているが、精度向上は低解像度の3D convに由来しているので、こういう構成にしている</li>
+</ul>
+</li>
+<li>filter後の最終出力は、各pixel・視差ごとに1次元の特徴量</li>
+</ul>
+</li>
+<li>
+<p>cost volumeの視差に関するargminをとって、視差を推定</p>
+<ul>
+<li>古典的な方法cost volume filtering [Rhemann+(2013)]では、cost(特徴量間のEuclidean distance)が最も小さくなる視差を選ぶ(winner-tales-all, WTA, argmin)</li>
+<li>argminだと微分可能でなく学習できないので、<strong>soft argmin</strong>を使う
+<ul>
+<li>soft argmin: 視差をコストのsoftmaxで重み付けして平均する</li>
+<li>[6]で提案され、[GC-Net]でも使われている</li>
+</ul>
+</li>
+<li>soft argmin以外にも、確率的に視差を選ぶ方法も試したが、soft argminの方が精度が良かった
+<ul>
+<li>softmaxを確率分布として、確率的に視差選ぶ。学習は期待値を最小化することで。</li>
+<li>この部分はあまりよく理解してない。論文には、このタイプのargminの先行研究が列挙してあるので暇ができたら読みたい。</li>
+<li>soft argminとの比較の実験結果は記載なし</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<h3 id="後段-荒い視差を入力画像をガイドとしてrefinement">後段: 荒い視差を、入力画像をガイドとしてRefinement</h3>
+<ul>
+<li>[GC-Net]と違いcost volumeから計算する視差は低解像度なので、追加で<strong>入力画像をガイドとしたRefinement</strong>を行うことで、入力画像のエッジを保存した視差を推定する</li>
+<li>Refinementの方法は[8,7,20]を参考にしている</li>
+<li>推論するのは、荒い視差と入力解像度でのGTとの差分(<strong>delta disparity</strong>)
+<ul>
+<li>Refinementの出力(delta disparity)とupsampleした荒い視差を足して最終出力とする</li>
+</ul>
+</li>
+<li>入力: 荒い視差を出力解像度にbiliear upsampleしたものと、RGB画像を出力解像度にリサイズしたもののconcate
+<ul>
+<li>Deconvはcheckerboard artifactが発生する場合があるので、bililear upsampleとconvを使う[40]</li>
+</ul>
+</li>
+<li>atrous convを利用</li>
+<li>多重解像度と、最大解像度のみの両方試した</li>
+<li>Lossは各解像度ごとに設定し、smoothed L1 lossっぽいもの[2] ([GC-Net]はL1 loss)</li>
+</ul>
+<h2 id="実験">実験</h2>
+<h3 id="scene-flow">Scene Flow</h3>
+<ul>
+<li>2枚の画像ペアに対し、同時に2つの視差(base画像を変える)を学習した方が学習の効率がいい（なぜ？）</li>
+<li>Fig3: Sub-pixel精度の実験
+<ul>
+<li>古典的な手法のsub-pixel精度は0.25pixel程度
+<ul>
+<li>古典的な方法はpixel精度で離散的なcostを計算して、それをparabora fittingすることでsub-pixel精度にする</li>
+<li>[45]のよると現実的なsub-pixel精度は1/10pixel程度、[10]によるとノイズがない場合の理論限界は1/100pixel程度</li>
+</ul>
+</li>
+<li>学習ベースの方法だと1/30pixel程度のsub-pixel精度が出る
+<ul>
+<li>本研究では、Refinementなしではその解像度で0.03pixel程度の精度</li>
+<li>Refinementなしだと、入力解像度ではcost volumeの縮小度に応じて線形で精度が悪化する</li>
+<li>しかし、Refinementをすると、ほとんどcost volumeの解像度に依らなくなる (Fig4, 5も参考)</li>
+<li>したがって、本研究のモデルはcost volumeは低解像度にして、Refinementで回復している</li>
+<li>ただし、あまりに小さい物体とか薄いものだとcost volumeで完全に消えてしまい、回復できなくなる</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Table1:
+<ul>
+<li>特徴量の解像度(縮小回数K=3 or 4), Refinementで多重解像度あり/なし の比較
+<ul>
+<li>当然、高解像度の特徴量/Refinementで多重解像度ありが精度は少しいいが、処理速度が書かれていないのでなんとも言えない</li>
+</ul>
+</li>
+<li>Scene FlowではSOTA(vs [GC-Net], CRL)
+<ul>
+<li>本研究でreifinementなしのモデルの方が[GC-Net]より高速で精度も高い(表には載っていないが、本文に記載)</li>
+<li>[GC-Net]はパラメータが多すぎて性能が下がっている？
+<figure class="center">
+    <img src="https://nohzen.github.io/Hugo_blog/images/khamis2018/fig5.png"
+         alt="[Khamis&#43;(2018)] Fig. 5より引用" width="1000"/> <figcaption>
+            <p>[Khamis+(2018)] Fig. 5より引用</p>
+        </figcaption>
+</figure>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="kitti">KITTI</h3>
+<ul>
+<li>Scene Flowで事前学習してKITTIでfine-tuning (KITTIはCNNを学習できるほど学習データがない)</li>
+<li>Table 2, 3
+<ul>
+<li>Kittiでは先行研究(vs MC-CNN, SGM-Net, CG-Net, CRL)と変わらない精度で高速(割と差があるような？)</li>
+</ul>
+</li>
+<li>失敗している原因は、反射やocclutionのようなStereo matchingでは正解がないシーン
+<ul>
+<li>これはどっちかと言うとInpaintingのタスクで、SOTAの手法はInpaintingで効果のあるhour-glassネットワークを使っているから精度がいいと思われる</li>
+</ul>
+</li>
+</ul>
+<h2 id="処理時間">処理時間</h2>
+<ul>
+<li>StereoNet: 720p 60Hz @GPU
+<ul>
+<li>[GC-Net] 0.95fps 960p</li>
+</ul>
+</li>
+<li>Fig.7: 処理時間が一番かかっているのはRefinement</li>
+</ul>
+<h1 id="感想">感想</h1>
+<ul>
+<li>元となった[GC-Net]ではconcateでcost volumeを構成しており、差などの相対的なものよりconcateのような絶対的なものの方がいいと言っているが、本研究は特徴量間の差でcost volumeを構成している
+<ul>
+<li>[GC-Net]ではconcateの方が精度がでると主張しており、本研究は変わらないといっていて、どっちが正しいのか気になった</li>
+</ul>
+</li>
+<li>古典的な手法が整数精度のcostのparabora fittingでsub-pixel精度にする方法に比べて、本研究ではsoft argminによる回帰でsub-pixel精度にしているためにsub-pixel精度がいいと思われる。
+<ul>
+<li>[GC-Net]の論文に分類問題として扱うより、回帰問題として扱った方が良いと書かれていた。</li>
+<li>本研究では「DLだと古典的な手法に比べて、sub-pixelの精度が高い」と言っているが、DLだと常にそうなのかは怪しい気がする（DLでも分類問題として扱った場合にはsub-pixel精度は高くならなさそう）</li>
+</ul>
+</li>
+<li>SceneFlowだとSOTAだが、KITTIだとSOTAに結構負けているのが気になった
+<ul>
+<li>論文では、「KITTIはInpainting的なタスクになっていて、そのせいだ」と言っているが、本当だろうか？</li>
+<li>学習データが少ない場合に精度がでないモデルになっていたりしない？</li>
+</ul>
+</li>
+<li>読みたい先行研究
+<ul>
+<li>refinement[8,7,20]</li>
+<li>教師なし[63]</li>
+</ul>
+</li>
+</ul>
+<h1 id="参考文献">参考文献</h1>
+<ul>
+<li>[Rhemann+(2013)] A. Rhemann et al. &ldquo;Fast cost-volume filtering for visual correspondence and beyond&rdquo; (2013)</li>
+<li>[GC-Net] A. Kendall et al. &quot; End-to-end learning of geometry and context for deep stereo regression&quot; (2017)</li>
+<li>[63] 教師なし
+古典survay</li>
+<li>[22] Hamzah et al. &ldquo;Literature survey on stereo vision disparity map algorithms&rdquo; (2016)</li>
+<li>[49] Scharstein et al. &ldquo;A taxonomy and evaluation of dense two-frame stereo correspondence algorithms&rdquo; (2002)</li>
+</ul>
+
+    </div>
+
+    
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="https://nohzen.github.io/Hugo_blog/tags/stereo-matching/">Stereo Matching</a>
+          </div>
+      <nav class="post-nav">
+        
+        <a class="next" href="https://nohzen.github.io/Hugo_blog/post/mayer2015/">
+            <span class="next-text nav-default">A Large Dataset to Train Convolutional Networks for Disparity, Optical Flow, and Scene Flow Estimation</span>
+            <span class="next-text nav-mobile">次の記事へ</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+  <a href="https://nohzen.github.io/Hugo_blog/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2020<span class="heart"><i class="iconfont icon-heart"></i></span><span>nohzen</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="https://nohzen.github.io/Hugo_blog/js/main.min.c12618f9a600c40bd024996677e951e64d3487006775aeb22e200c990006c5c7.js"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

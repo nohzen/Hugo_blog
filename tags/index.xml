@@ -6,7 +6,16 @@
     <description>Recent content in Tags on memo</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
-    <lastBuildDate>Mon, 02 Nov 2020 00:42:01 +0900</lastBuildDate><atom:link href="https://nohzen.github.io/Hugo_blog/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 03 Nov 2020 19:49:36 +0900</lastBuildDate><atom:link href="https://nohzen.github.io/Hugo_blog/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Stereo Matching</title>
+      <link>https://nohzen.github.io/Hugo_blog/tags/stereo-matching/</link>
+      <pubDate>Tue, 03 Nov 2020 19:49:36 +0900</pubDate>
+      
+      <guid>https://nohzen.github.io/Hugo_blog/tags/stereo-matching/</guid>
+      <description></description>
+    </item>
+    
     <item>
       <title>Dataset</title>
       <link>https://nohzen.github.io/Hugo_blog/tags/dataset/</link>
@@ -31,15 +40,6 @@
       <pubDate>Mon, 02 Nov 2020 00:42:01 +0900</pubDate>
       
       <guid>https://nohzen.github.io/Hugo_blog/tags/scene-flow/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Stereo Matching</title>
-      <link>https://nohzen.github.io/Hugo_blog/tags/stereo-matching/</link>
-      <pubDate>Mon, 02 Nov 2020 00:42:01 +0900</pubDate>
-      
-      <guid>https://nohzen.github.io/Hugo_blog/tags/stereo-matching/</guid>
       <description></description>
     </item>
     

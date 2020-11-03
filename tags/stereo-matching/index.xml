@@ -6,7 +6,16 @@
     <description>Recent content in Stereo Matching on memo</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
-    <lastBuildDate>Mon, 02 Nov 2020 00:42:01 +0900</lastBuildDate><atom:link href="https://nohzen.github.io/Hugo_blog/tags/stereo-matching/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 03 Nov 2020 19:49:36 +0900</lastBuildDate><atom:link href="https://nohzen.github.io/Hugo_blog/tags/stereo-matching/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>StereoNet: Guided Hierarchical Refinement for Real-Time Edge-Aware Depth Prediction</title>
+      <link>https://nohzen.github.io/Hugo_blog/post/khamis2018/</link>
+      <pubDate>Tue, 03 Nov 2020 19:49:36 +0900</pubDate>
+      
+      <guid>https://nohzen.github.io/Hugo_blog/post/khamis2018/</guid>
+      <description>S. Khamis et al. &amp;ldquo;StereoNet: Guided Hierarchical Refinement for Real-Time Edge-Aware Depth Prediction&amp;rdquo; (2018) ECCV2018 概要 Stereo matchingを行うDNN StereoNetを提案 先行研究GC-Netと同じく、Cost volumeと</description>
+    </item>
+    
     <item>
       <title>A Large Dataset to Train Convolutional Networks for Disparity, Optical Flow, and Scene Flow Estimation</title>
       <link>https://nohzen.github.io/Hugo_blog/post/mayer2015/</link>
