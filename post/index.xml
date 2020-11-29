@@ -6,7 +6,16 @@
     <description>Recent content in Posts on memo</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
-    <lastBuildDate>Tue, 03 Nov 2020 19:49:36 +0900</lastBuildDate><atom:link href="https://nohzen.github.io/Hugo_blog/post/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 29 Nov 2020 16:52:18 +0900</lastBuildDate><atom:link href="https://nohzen.github.io/Hugo_blog/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Spatial Pyramid Pooling Network (SPP-net)</title>
+      <link>https://nohzen.github.io/Hugo_blog/post/he2014_sppnet/</link>
+      <pubDate>Sun, 29 Nov 2020 16:52:18 +0900</pubDate>
+      
+      <guid>https://nohzen.github.io/Hugo_blog/post/he2014_sppnet/</guid>
+      <description>K. He et al. &amp;ldquo;Spatial Pyramid Pooling in Deep Convolutional Networks for Visual Recognition&amp;rdquo; (2014) 概要 これまで固定の入力サイズしか扱えなかったCNNを、任意の入力サイズを扱えるようにするSpatial Pyramid Poo</description>
+    </item>
+    
     <item>
       <title>StereoNet: Guided Hierarchical Refinement for Real-Time Edge-Aware Depth Prediction</title>
       <link>https://nohzen.github.io/Hugo_blog/post/khamis2018/</link>

@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Spatial Pyramid Pooling Network (SPP-net) - memo</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="nohzen" /><meta name="description" content="K. He et al. &amp;ldquo;Spatial Pyramid Pooling in Deep Convolutional Networks for Visual Recognition&amp;rdquo; (2014) 概要 これまで固定の入力サイズしか扱えなかったCNNを、任意の入力サイズを扱えるようにするSpatial Pyramid Poo" /><meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.75.1 with theme even" />
+
+
+<link rel="canonical" href="https://nohzen.github.io/Hugo_blog/post/he2014_sppnet/" />
+<link rel="apple-touch-icon" sizes="180x180" href="https://nohzen.github.io/Hugo_blog/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://nohzen.github.io/Hugo_blog/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="https://nohzen.github.io/Hugo_blog/favicon-16x16.png">
+<link rel="manifest" href="https://nohzen.github.io/Hugo_blog/manifest.json">
+<link rel="mask-icon" href="https://nohzen.github.io/Hugo_blog/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="https://nohzen.github.io/Hugo_blog/sass/main.min.c7bc1becf36bcf6a9ebd25d2947e43a2eb745ddb0c9a32b43126fd7fa460c351.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="Spatial Pyramid Pooling Network (SPP-net)" />
+<meta property="og:description" content="K. He et al. &ldquo;Spatial Pyramid Pooling in Deep Convolutional Networks for Visual Recognition&rdquo; (2014) 概要 これまで固定の入力サイズしか扱えなかったCNNを、任意の入力サイズを扱えるようにするSpatial Pyramid Poo" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://nohzen.github.io/Hugo_blog/post/he2014_sppnet/" />
+<meta property="article:published_time" content="2020-11-29T16:52:18+09:00" />
+<meta property="article:modified_time" content="2020-11-29T16:52:18+09:00" />
+<meta itemprop="name" content="Spatial Pyramid Pooling Network (SPP-net)">
+<meta itemprop="description" content="K. He et al. &ldquo;Spatial Pyramid Pooling in Deep Convolutional Networks for Visual Recognition&rdquo; (2014) 概要 これまで固定の入力サイズしか扱えなかったCNNを、任意の入力サイズを扱えるようにするSpatial Pyramid Poo">
+<meta itemprop="datePublished" content="2020-11-29T16:52:18+09:00" />
+<meta itemprop="dateModified" content="2020-11-29T16:52:18+09:00" />
+<meta itemprop="wordCount" content="2143">
+
+
+
+<meta itemprop="keywords" content="Classificatiom,Detection," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Spatial Pyramid Pooling Network (SPP-net)"/>
+<meta name="twitter:description" content="K. He et al. &ldquo;Spatial Pyramid Pooling in Deep Convolutional Networks for Visual Recognition&rdquo; (2014) 概要 これまで固定の入力サイズしか扱えなかったCNNを、任意の入力サイズを扱えるようにするSpatial Pyramid Poo"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="https://nohzen.github.io/Hugo_blog/" class="logo">memo</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="https://nohzen.github.io/Hugo_blog/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="https://nohzen.github.io/Hugo_blog/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="https://nohzen.github.io/Hugo_blog/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="https://nohzen.github.io/Hugo_blog/" class="logo">memo</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="https://nohzen.github.io/Hugo_blog/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="https://nohzen.github.io/Hugo_blog/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="https://nohzen.github.io/Hugo_blog/tags/">Tags</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Spatial Pyramid Pooling Network (SPP-net)</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2020-11-29 </span>
+        
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">コンテンツ</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#概要">概要</a></li>
+    <li><a href="#論文情報">論文情報</a>
+      <ul>
+        <li><a href="#リンク">リンク</a></li>
+        <li><a href="#著者">著者</a></li>
+      </ul>
+    </li>
+    <li><a href="#内容">内容</a>
+      <ul>
+        <li><a href="#既存のネットワークの問題点">既存のネットワークの問題点</a></li>
+        <li><a href="#cnn以前のspatial-pyramid-pooling">CNN以前のSpatial Pyramid Pooling</a></li>
+        <li><a href="#spatial-pyramid-poolingspp-layer">Spatial Pyramid Pooling(SPP) Layer</a></li>
+        <li><a href="#spatial-pyramid-pooling-network">Spatial Pyramid Pooling Network</a></li>
+        <li><a href="#学習">学習</a></li>
+        <li><a href="#実験結果">実験結果</a></li>
+      </ul>
+    </li>
+    <li><a href="#感想">感想</a></li>
+    <li><a href="#参考文献">参考文献</a></li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <p><a href="https://arxiv.org/abs/1406.4729">K. He et al. &ldquo;Spatial Pyramid Pooling in Deep Convolutional Networks for Visual Recognition&rdquo; (2014)</a></p>
+<h1 id="概要">概要</h1>
+<ul>
+<li>これまで固定の入力サイズしか扱えなかったCNNを、任意の入力サイズを扱えるようにする<strong>Spatial Pyramid Pooling</strong>(SPP)を提案した</li>
+<li>Spatial Pyramid Poolingを用いた<strong>Spatial Pyramid Pooling Network</strong>(SPP-net)を提案し、画像分類に加え、R-CNNより高速で高精度な物体検出を提案</li>
+<li>ILSVRC 2014のコンペの物体検出部門で2位、分類部門で3位(1位はGoogLeNet、2位はVGG)</li>
+</ul>
+<h1 id="論文情報">論文情報</h1>
+<h2 id="リンク">リンク</h2>
+<ul>
+<li><a href="http://kaiminghe.com/eccv14sppnet/index.html">プロジェクトページ</a></li>
+<li><a href="https://github.com/ShaoqingRen/SPP_net">公式実装</a></li>
+<li><a href="http://kaiminghe.com/eccv14sppnet/sppnet_ilsvrc2014.pdf">slide</a></li>
+</ul>
+<p>野良実装</p>
+<ul>
+<li><a href="https://github.com/yhenon/keras-spp">https://github.com/yhenon/keras-spp</a></li>
+<li><a href="https://github.com/bahl24/SpatialPyramidPooling_Keras">https://github.com/bahl24/SpatialPyramidPooling_Keras</a></li>
+</ul>
+<h2 id="著者">著者</h2>
+<p>Microsoft Research Asia(MSRA)のメンバー(第2、3著者がインターンの時にやったプロジェクト)。</p>
+<ul>
+<li><a href="http://kaiminghe.com/">Kaiming He</a> 現Facebook AI Research(FAIR)。Guided Filter, ResNet, Mask-RCNNなどの第一著者</li>
+<li>Xiangyu Zhang, 現Megvii?。ResNet, Shufflenetなど</li>
+<li><a href="https://www.shaoqingren.com/">Shaoqing Ren</a> 現NIO。ResNet, FasterRCNNなど</li>
+<li><a href="http://www.jiansun.org/">Jian Sun</a> 現Megvii。ResNet, Faster-RCNNなど</li>
+</ul>
+<h1 id="内容">内容</h1>
+<h2 id="既存のネットワークの問題点">既存のネットワークの問題点</h2>
+<ul>
+<li>ImageNetのコンペなどで使われる既存のClassificationのネットワークは、固定サイズ(224x224)しか入力できない
+<ul>
+<li>前段の畳み込み層は任意の入力サイズに対して使えるが、後段の全結合層が固定サイズしか対応できないため</li>
+<li>固定サイズの入力にするために、Cropしたり(対象物体が見切れてしまう)、リスケールしたりしている(アスペクト比が変わってしまう)
+<figure class="center">
+    <img src="https://nohzen.github.io/Hugo_blog/images/he2014_SPPNet/Fig1.png"
+         alt="[He&#43;(2014)] Fig. 1より引用。上が既存のネットワーク、下が提案手法。" width="1000"/> <figcaption>
+            <p>[He+(2014)] Fig. 1より引用。上が既存のネットワーク、下が提案手法。</p>
+        </figcaption>
+</figure>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="cnn以前のspatial-pyramid-pooling">CNN以前のSpatial Pyramid Pooling</h2>
+<ul>
+<li><strong>Bag-of-Words</strong>(BoW)は元々、自然言語処理で使われていた手法で、文章中の単語の出てくる頻度をベクトルとして、その文章の特徴量として使う手法である（文章中で単語が出てくる順番の情報は捨てる）。</li>
+<li>BoWは画像処理にも応用され、画像の局所特徴量(SIFT)を考え、それの画像全体でのヒストグラムをベクトルとして、その画像の特徴量として扱う（ヒストグラムにするので、各局所特徴量の位置の情報は捨てる）[16]。</li>
+<li>位置の情報を完全に捨ててしまうのは良くないということで、画像Pyramidを作成し、各Pyramidのブロックごとにヒストグラムを作る手法が提案された(spatial pyramid matching(SPM)やSpatial pyramid poolingと呼ばれる)[14, 15]。</li>
+</ul>
+<h2 id="spatial-pyramid-poolingspp-layer">Spatial Pyramid Pooling(SPP) Layer</h2>
+<ul>
+<li>CNN以前の手法では、SIFTなどをSpatial pyramid poolingの入力としていたが、CNNの出力の特徴量をSPPの入力とする</li>
+<li>入力特徴量サイズに依らず、固定の数の多重解像度ブロックを考え(下の例では1x1, 2x2, 4x4)、各ブロックでmax Poolingする(つまり、各ブロック内では、位置情報は捨てられる)。
+<figure class="center">
+    <img src="https://nohzen.github.io/Hugo_blog/images/he2014_SPPNet/Fig3.png"
+         alt="[He&#43;(2014)] Fig. 3より引用。" width="1000"/> <figcaption>
+            <p>[He+(2014)] Fig. 3より引用。</p>
+        </figcaption>
+</figure>
+</li>
+<li>1x1だけの場合が、CNN以前のBoWに対応し、DLでは<strong>Global (average/max) pooling</strong>として知られている。</li>
+<li>既存のPoolingと違い、固定サイズの出力にできる・多重解像度で色々なスケールの特徴量を含む といった利点がある</li>
+</ul>
+<h2 id="spatial-pyramid-pooling-network">Spatial Pyramid Pooling Network</h2>
+<ul>
+<li>畳み込み層で作った入力サイズに依存する特徴量を受け取って、Spatial Pyramid Poolingで固定サイズの特徴量にし、全結合層に渡す</li>
+<li>既存のCNNと組み合わせて使え(既存手法の畳み込み層と全結合層の間にSPPを入れる)、実際、いろいろな既存ネットワークの精度向上に寄与した</li>
+</ul>
+<h2 id="学習">学習</h2>
+<p>SPP-Net自体は任意のサイズの入力を受け取れるので、任意のサイズの画像で学習できるが、それだとGPUを使いにくい。
+したがって、実際の学習では、以下の2通りを試している</p>
+<ul>
+<li>Single-size training: 既存手法と同じように固定サイズ(224x224)の入力画像で学習</li>
+<li>Multi-size training: エポックごとに入力サイズを変える</li>
+</ul>
+<h2 id="実験結果">実験結果</h2>
+<p>Sec3以降は未読</p>
+<h1 id="感想">感想</h1>
+<ul>
+<li>PSMNetで引用されていたので読んだ</li>
+<li>Deep learning以前の手法を、Deep learningに取り入れているのが良い</li>
+<li>物体検出への適用に関しては、2020年現在ではFeature pyramid Networkとかもっといい手法がある</li>
+<li>Spatial Pyramid Poolingは、全く同じものが違うスケールで画像に写っていた場合に、同じ結果を返すことが保証されていない
+<ul>
+<li>WxHの画像と、それをW/2xH/2に縮小したものが左下に写ったWxHの画像: 前者の1x1 poolingが、後者の2x2 poolingに対応しそうなので、全結合層でそういった違いを吸収できる必要がある</li>
+<li>WxHの画像と、それをW/2xH/2に縮小した画像を比べた場合: 同じものでも、異なるreceptive fileldで捉えないとだめ</li>
+<li>同じものが違うスケールで写っていても、同じ結果を返すように、ある程度学習されるだろうけど、アーキテクチャ自体がそういう性質を持って欲しい</li>
+<li>画像分類だと普通、分類されるべきラベルのものが画像全体に大きく写っているので、あまり問題にならないのかも知れない</li>
+<li>物体検出だと、問題になりそう</li>
+</ul>
+</li>
+</ul>
+<h1 id="参考文献">参考文献</h1>
+<p>BoW/Spatial Pyramid Pooling 関係</p>
+<ul>
+<li>BoW解説 <a href="https://aidiary.hatenablog.com/entry/20100227/1267277731">https://aidiary.hatenablog.com/entry/20100227/1267277731</a></li>
+<li>コンピュータビジョン最先端ガイド2 Sec 2.2.4</li>
+<li>[14] K. Grauman, et al. “The pyramid match kernel: Discriminative classification with sets of image features,” (2005)</li>
+<li>[15] S. Lazebnik, et al. “Beyond bags of features: Spatial pyramid matching for recognizing natural scene categories,” (2006)</li>
+<li>[16] J. Sivic, et al. “Video google: a text retrieval approach to object matching in videos,” (2003)</li>
+</ul>
+
+    </div>
+
+    
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="https://nohzen.github.io/Hugo_blog/tags/classificatiom/">Classificatiom</a>
+          <a href="https://nohzen.github.io/Hugo_blog/tags/detection/">Detection</a>
+          </div>
+      <nav class="post-nav">
+        
+        <a class="next" href="https://nohzen.github.io/Hugo_blog/post/khamis2018/">
+            <span class="next-text nav-default">StereoNet: Guided Hierarchical Refinement for Real-Time Edge-Aware Depth Prediction</span>
+            <span class="next-text nav-mobile">次の記事へ</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+  <a href="https://nohzen.github.io/Hugo_blog/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2020<span class="heart"><i class="iconfont icon-heart"></i></span><span>nohzen</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="https://nohzen.github.io/Hugo_blog/js/main.min.c12618f9a600c40bd024996677e951e64d3487006775aeb22e200c990006c5c7.js"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

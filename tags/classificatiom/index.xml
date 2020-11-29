@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Classificatiom on memo</title>
+    <link>https://nohzen.github.io/Hugo_blog/tags/classificatiom/</link>
+    <description>Recent content in Classificatiom on memo</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ja</language>
+    <lastBuildDate>Sun, 29 Nov 2020 16:52:18 +0900</lastBuildDate><atom:link href="https://nohzen.github.io/Hugo_blog/tags/classificatiom/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Spatial Pyramid Pooling Network (SPP-net)</title>
+      <link>https://nohzen.github.io/Hugo_blog/post/he2014_sppnet/</link>
+      <pubDate>Sun, 29 Nov 2020 16:52:18 +0900</pubDate>
+      
+      <guid>https://nohzen.github.io/Hugo_blog/post/he2014_sppnet/</guid>
+      <description>K. He et al. &amp;ldquo;Spatial Pyramid Pooling in Deep Convolutional Networks for Visual Recognition&amp;rdquo; (2014) 概要 これまで固定の入力サイズしか扱えなかったCNNを、任意の入力サイズを扱えるようにするSpatial Pyramid Poo</description>
+    </item>
+    
+  </channel>
+</rss>

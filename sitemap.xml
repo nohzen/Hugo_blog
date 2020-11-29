@@ -2,15 +2,43 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://nohzen.github.io/Hugo_blog/tags/classificatiom/</loc>
+    <lastmod>2020-11-29T16:52:18+09:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://nohzen.github.io/Hugo_blog/tags/detection/</loc>
+    <lastmod>2020-11-29T16:52:18+09:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
     <loc>https://nohzen.github.io/Hugo_blog/</loc>
-    <lastmod>2020-11-03T19:49:36+09:00</lastmod>
+    <lastmod>2020-11-29T16:52:18+09:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
     <loc>https://nohzen.github.io/Hugo_blog/post/</loc>
-    <lastmod>2020-11-03T19:49:36+09:00</lastmod>
+    <lastmod>2020-11-29T16:52:18+09:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://nohzen.github.io/Hugo_blog/post/he2014_sppnet/</loc>
+    <lastmod>2020-11-29T16:52:18+09:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://nohzen.github.io/Hugo_blog/tags/</loc>
+    <lastmod>2020-11-29T16:52:18+09:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
@@ -24,13 +52,6 @@
   
   <url>
     <loc>https://nohzen.github.io/Hugo_blog/post/khamis2018/</loc>
-    <lastmod>2020-11-03T19:49:36+09:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>https://nohzen.github.io/Hugo_blog/tags/</loc>
     <lastmod>2020-11-03T19:49:36+09:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
