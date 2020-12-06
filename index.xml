@@ -6,7 +6,16 @@
     <description>Recent content on memo</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
-    <lastBuildDate>Mon, 30 Nov 2020 01:08:08 +0900</lastBuildDate><atom:link href="https://nohzen.github.io/Hugo_blog/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 06 Dec 2020 05:33:22 +0900</lastBuildDate><atom:link href="https://nohzen.github.io/Hugo_blog/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Pyramid Stereo Matching Network (PSMNet)</title>
+      <link>https://nohzen.github.io/Hugo_blog/post/chang2018_psmnet/</link>
+      <pubDate>Sun, 06 Dec 2020 05:33:22 +0900</pubDate>
+      
+      <guid>https://nohzen.github.io/Hugo_blog/post/chang2018_psmnet/</guid>
+      <description>J.-R. Chang, et al. &amp;ldquo;Pyramid Stereo Matching Network&amp;rdquo; (2018) CVPR 2018 概要 Pyramid Stereo Matching Network (PSMNet)と名付けた視差推定のネットワークを提案 [GCNet]をベースとする 画像のグローバルなコンテ</description>
+    </item>
+    
     <item>
       <title>Pyramid Scene Parsing Network (PSPNet)</title>
       <link>https://nohzen.github.io/Hugo_blog/post/zhao2016_pspnet/</link>

@@ -6,7 +6,16 @@
     <description>Recent content in Stereo Matching on memo</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
-    <lastBuildDate>Tue, 03 Nov 2020 19:49:36 +0900</lastBuildDate><atom:link href="https://nohzen.github.io/Hugo_blog/tags/stereo-matching/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 06 Dec 2020 05:33:22 +0900</lastBuildDate><atom:link href="https://nohzen.github.io/Hugo_blog/tags/stereo-matching/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Pyramid Stereo Matching Network (PSMNet)</title>
+      <link>https://nohzen.github.io/Hugo_blog/post/chang2018_psmnet/</link>
+      <pubDate>Sun, 06 Dec 2020 05:33:22 +0900</pubDate>
+      
+      <guid>https://nohzen.github.io/Hugo_blog/post/chang2018_psmnet/</guid>
+      <description>J.-R. Chang, et al. &amp;ldquo;Pyramid Stereo Matching Network&amp;rdquo; (2018) CVPR 2018 概要 Pyramid Stereo Matching Network (PSMNet)と名付けた視差推定のネットワークを提案 [GCNet]をベースとする 画像のグローバルなコンテ</description>
+    </item>
+    
     <item>
       <title>StereoNet: Guided Hierarchical Refinement for Real-Time Edge-Aware Depth Prediction</title>
       <link>https://nohzen.github.io/Hugo_blog/post/khamis2018/</link>
