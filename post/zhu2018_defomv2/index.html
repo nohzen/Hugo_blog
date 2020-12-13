@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Deformable ConvNets v2 - memo</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="nohzen" /><meta name="description" content="X. Zhu et al. &amp;ldquo;Deformable ConvNets v2: More Deformable, Better Results&amp;rdquo; (2018) CVPR2019 概要 Deformable ConvNets v1は普通のConvNetsより改善はしているが、特徴量に寄与している領域を可視化すると改善の余地があるこ" /><meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.75.1 with theme even" />
+
+
+<link rel="canonical" href="https://nohzen.github.io/Hugo_blog/post/zhu2018_defomv2/" />
+<link rel="apple-touch-icon" sizes="180x180" href="https://nohzen.github.io/Hugo_blog/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://nohzen.github.io/Hugo_blog/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="https://nohzen.github.io/Hugo_blog/favicon-16x16.png">
+<link rel="manifest" href="https://nohzen.github.io/Hugo_blog/manifest.json">
+<link rel="mask-icon" href="https://nohzen.github.io/Hugo_blog/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="https://nohzen.github.io/Hugo_blog/sass/main.min.c7bc1becf36bcf6a9ebd25d2947e43a2eb745ddb0c9a32b43126fd7fa460c351.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="Deformable ConvNets v2" />
+<meta property="og:description" content="X. Zhu et al. &ldquo;Deformable ConvNets v2: More Deformable, Better Results&rdquo; (2018) CVPR2019 概要 Deformable ConvNets v1は普通のConvNetsより改善はしているが、特徴量に寄与している領域を可視化すると改善の余地があるこ" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://nohzen.github.io/Hugo_blog/post/zhu2018_defomv2/" />
+<meta property="article:published_time" content="2020-12-14T00:55:04+09:00" />
+<meta property="article:modified_time" content="2020-12-14T00:55:04+09:00" />
+<meta itemprop="name" content="Deformable ConvNets v2">
+<meta itemprop="description" content="X. Zhu et al. &ldquo;Deformable ConvNets v2: More Deformable, Better Results&rdquo; (2018) CVPR2019 概要 Deformable ConvNets v1は普通のConvNetsより改善はしているが、特徴量に寄与している領域を可視化すると改善の余地があるこ">
+<meta itemprop="datePublished" content="2020-12-14T00:55:04+09:00" />
+<meta itemprop="dateModified" content="2020-12-14T00:55:04+09:00" />
+<meta itemprop="wordCount" content="1344">
+
+
+
+<meta itemprop="keywords" content="Object Detection,Instance Segmentation," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Deformable ConvNets v2"/>
+<meta name="twitter:description" content="X. Zhu et al. &ldquo;Deformable ConvNets v2: More Deformable, Better Results&rdquo; (2018) CVPR2019 概要 Deformable ConvNets v1は普通のConvNetsより改善はしているが、特徴量に寄与している領域を可視化すると改善の余地があるこ"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="https://nohzen.github.io/Hugo_blog/" class="logo">memo</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="https://nohzen.github.io/Hugo_blog/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="https://nohzen.github.io/Hugo_blog/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="https://nohzen.github.io/Hugo_blog/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="https://nohzen.github.io/Hugo_blog/" class="logo">memo</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="https://nohzen.github.io/Hugo_blog/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="https://nohzen.github.io/Hugo_blog/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="https://nohzen.github.io/Hugo_blog/tags/">Tags</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Deformable ConvNets v2</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2020-12-14 </span>
+        
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">コンテンツ</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#概要">概要</a></li>
+    <li><a href="#論文情報">論文情報</a>
+      <ul>
+        <li><a href="#リンク">リンク</a></li>
+        <li><a href="#著者">著者</a></li>
+      </ul>
+    </li>
+    <li><a href="#内容感想">内容・感想</a>
+      <ul>
+        <li><a href="#より多くの層でdeformable-convを使う">より多くの層で、Deformable Convを使う</a></li>
+        <li><a href="#modulated-defomable-modules">Modulated Defomable Modules</a></li>
+        <li><a href="#r-cnn-feature-mimicking">R-CNN Feature Mimicking</a></li>
+      </ul>
+    </li>
+    <li><a href="#参考文献">参考文献</a></li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <p><a href="https://arxiv.org/abs/1811.11168">X. Zhu <em>et al</em>. &ldquo;Deformable ConvNets v2: More Deformable, Better Results&rdquo; (2018) CVPR2019</a></p>
+<h1 id="概要">概要</h1>
+<ul>
+<li><strong>Deformable ConvNets v1</strong>は普通のConvNetsより改善はしているが、特徴量に寄与している領域を可視化すると改善の余地があることが分かった</li>
+<li>Deformable ConvNets v1を3つの点で改善した<strong>Deformable ConvNets v2</strong>を提案した
+<ol>
+<li>Deformable Conv層の数を増やす</li>
+<li>畳み込みのサンプリング位置を可変・学習可能するだめでなく、<strong>絶対値(modulation)も可変・学習可能に</strong>する</li>
+<li>適切な場所から特徴量を学習できるように、<strong>R-CNNの特徴量と一致させるようなLossを加えて学習</strong>する(蒸留的な方法)</li>
+</ol>
+</li>
+<li>Deformable ConvNets v2を、Object DetectionとInstance Segmentationに適用</li>
+</ul>
+<h1 id="論文情報">論文情報</h1>
+<h2 id="リンク">リンク</h2>
+<ul>
+<li><a href="https://github.com/msracver/Deformable-ConvNets/tree/master/DCNv2_op">公式実装</a></li>
+<li>野良実装
+<ul>
+<li><a href="https://github.com/chengdazhi/Deformable-Convolution-V2-PyTorch">https://github.com/chengdazhi/Deformable-Convolution-V2-PyTorch</a></li>
+<li><a href="https://github.com/4uiiurz1/pytorch-deform-conv-v2">https://github.com/4uiiurz1/pytorch-deform-conv-v2</a></li>
+</ul>
+</li>
+</ul>
+<h2 id="著者">著者</h2>
+<p>Microsoft Research Asia (MSRA)のメンバー。第1著者がインターン中の仕事。第2著者, ラストオーサーはV1と同じ人。</p>
+<ul>
+<li>Xizhou Zhu</li>
+<li><a href="https://ancientmooner.github.io/">Han Hu</a></li>
+<li>Stephen Lin</li>
+<li><a href="https://jifengdai.org/">Jifeng Dai</a> 現SenseTime Research。R-FCNなど。</li>
+</ul>
+<h1 id="内容感想">内容・感想</h1>
+<p>日本語の記事が既にあったので、主に感想のみ。</p>
+<ul>
+<li>解説記事
+<ul>
+<li><a href="http://peluigi.hatenablog.com/entry/2018/11/30/150502">http://peluigi.hatenablog.com/entry/2018/11/30/150502</a></li>
+<li><a href="https://uiiurz1.hatenablog.com/entry/2018/12/20/190851">https://uiiurz1.hatenablog.com/entry/2018/12/20/190851</a></li>
+</ul>
+</li>
+</ul>
+<h2 id="より多くの層でdeformable-convを使う">より多くの層で、Deformable Convを使う</h2>
+<ul>
+<li>v1では3層でしかDeformable Convを使っていなかったのを、v2では12層で使う</li>
+<li>計算量とのトレードオフを考えても精度は上がる？
+<ul>
+<li>同じ計算量で、チャンネルなどを増やした場合と、Deformable convにした場合で後者の方が効率がいい？</li>
+</ul>
+</li>
+</ul>
+<h2 id="modulated-defomable-modules">Modulated Defomable Modules</h2>
+<ul>
+<li><strong>Modulated Defomable Modules</strong>: v1のDefomableが、サンプリング場所(offset)だけを動的に変えていたのに対し、絶対値(modulation)も動的に変える</li>
+<li>CNNやROI Poolingでは、サンプリング場所は元々固定だったので、可変で学習可能に変えるのは意味がありそうだが、絶対値は元々weightで可変で学習可能だったので、追加のパラメータを導入する意味はあまりないのでは？
+<ul>
+<li>パラメータ数が増えるので、精度は上がるかも知れないが… その分、計算量なども増えるだろうし。</li>
+<li>実際、実験結果でもあまり精度が上がっていない気がする</li>
+</ul>
+</li>
+</ul>
+<h2 id="r-cnn-feature-mimicking">R-CNN Feature Mimicking</h2>
+<ul>
+<li>Deformable Convでは、物体領域外の有効でない場所に、サンプリング点がはみ出てしまうことがある。</li>
+<li>それを防ぐために、物体矩形のみから特徴量を計算するR-CNN（そのまま使うのは、矩形ごとにCNNのforwardを計算するので効率が悪い）の特徴量を真似るようなLossを追加して学習する</li>
+<li>蒸留的な役割をして、学習しやすくなるという点では良さそう
+<ul>
+<li>これがないと、v2は学習できない？ より学習を安定化させるために追加しただけ？</li>
+</ul>
+</li>
+<li>そもそも、サンプリング場所(offset)を計算するためのCNNの入力特徴量を、もっと広い範囲のものを使った方が良さそう
+<ul>
+<li>サンプリング場所を計算する畳み込み層の入力は、サンプリング場所が固定のCNNの入力特徴量と同じものを使っている</li>
+<li>サンプリング場所は、元の入力特徴量の場所より外の領域に行きうるので、よく無さそう（receptive fieldの範囲には収まっているかも知れないが）</li>
+<li>もしくは、offsetが外の範囲に行かないようなハードな拘束を入れる設計にした方が良さそう。R-CNN Feature Mimickingみたいなソフトな拘束にするより。</li>
+</ul>
+</li>
+</ul>
+<h1 id="参考文献">参考文献</h1>
+<ul>
+<li>蒸留/Feature Mimicking
+<ul>
+<li>[2] J. Ba, et al. &ldquo;Do deep nets really need to be deep?&rdquo; (2014)</li>
+<li>[22] G. Hinton, et al. &ldquo;Distilling the knowledge in a neural network&rdquo; (2015)</li>
+<li>[28]  Q. Li, et al. &ldquo;Mimicking very efficient network for object detection&rdquo; (2017)</li>
+</ul>
+</li>
+</ul>
+
+    </div>
+
+    
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="https://nohzen.github.io/Hugo_blog/tags/object-detection/">Object Detection</a>
+          <a href="https://nohzen.github.io/Hugo_blog/tags/instance-segmentation/">Instance Segmentation</a>
+          </div>
+      <nav class="post-nav">
+        
+        <a class="next" href="https://nohzen.github.io/Hugo_blog/post/dai2017/">
+            <span class="next-text nav-default">Deformable Convolutional Networks</span>
+            <span class="next-text nav-mobile">次の記事へ</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+  <a href="https://nohzen.github.io/Hugo_blog/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2020<span class="heart"><i class="iconfont icon-heart"></i></span><span>nohzen</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="https://nohzen.github.io/Hugo_blog/js/main.min.c12618f9a600c40bd024996677e951e64d3487006775aeb22e200c990006c5c7.js"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>
