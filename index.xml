@@ -6,7 +6,16 @@
     <description>Recent content on memo</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
-    <lastBuildDate>Mon, 14 Dec 2020 00:55:04 +0900</lastBuildDate><atom:link href="https://nohzen.github.io/Hugo_blog/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 28 Dec 2020 01:34:07 +0900</lastBuildDate><atom:link href="https://nohzen.github.io/Hugo_blog/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Vortex Pooling</title>
+      <link>https://nohzen.github.io/Hugo_blog/post/xie2018_vortexpooling/</link>
+      <pubDate>Mon, 28 Dec 2020 01:34:07 +0900</pubDate>
+      
+      <guid>https://nohzen.github.io/Hugo_blog/post/xie2018_vortexpooling/</guid>
+      <description>C.-W. Xie, et al. &amp;ldquo;Vortex pooling: Improving context representation in semantic segmentation&amp;rdquo; (2018) 概要 DeepLab v3のAtrous Spatial Pyramid Pooling(ASPP) moduleを改良したVortex Pooling moduleを提案し、Semantic Segme</description>
+    </item>
+    
     <item>
       <title>Deformable ConvNets v2</title>
       <link>https://nohzen.github.io/Hugo_blog/post/zhu2018_defomv2/</link>

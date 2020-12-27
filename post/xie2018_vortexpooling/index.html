@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Vortex Pooling - memo</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="nohzen" /><meta name="description" content="C.-W. Xie, et al. &amp;ldquo;Vortex pooling: Improving context representation in semantic segmentation&amp;rdquo; (2018) 概要 DeepLab v3のAtrous Spatial Pyramid Pooling(ASPP) moduleを改良したVortex Pooling moduleを提案し、Semantic Segme" /><meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.75.1 with theme even" />
+
+
+<link rel="canonical" href="https://nohzen.github.io/Hugo_blog/post/xie2018_vortexpooling/" />
+<link rel="apple-touch-icon" sizes="180x180" href="https://nohzen.github.io/Hugo_blog/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://nohzen.github.io/Hugo_blog/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="https://nohzen.github.io/Hugo_blog/favicon-16x16.png">
+<link rel="manifest" href="https://nohzen.github.io/Hugo_blog/manifest.json">
+<link rel="mask-icon" href="https://nohzen.github.io/Hugo_blog/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="https://nohzen.github.io/Hugo_blog/sass/main.min.c7bc1becf36bcf6a9ebd25d2947e43a2eb745ddb0c9a32b43126fd7fa460c351.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="Vortex Pooling" />
+<meta property="og:description" content="C.-W. Xie, et al. &ldquo;Vortex pooling: Improving context representation in semantic segmentation&rdquo; (2018) 概要 DeepLab v3のAtrous Spatial Pyramid Pooling(ASPP) moduleを改良したVortex Pooling moduleを提案し、Semantic Segme" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://nohzen.github.io/Hugo_blog/post/xie2018_vortexpooling/" />
+<meta property="article:published_time" content="2020-12-28T01:34:07+09:00" />
+<meta property="article:modified_time" content="2020-12-28T01:34:07+09:00" />
+<meta itemprop="name" content="Vortex Pooling">
+<meta itemprop="description" content="C.-W. Xie, et al. &ldquo;Vortex pooling: Improving context representation in semantic segmentation&rdquo; (2018) 概要 DeepLab v3のAtrous Spatial Pyramid Pooling(ASPP) moduleを改良したVortex Pooling moduleを提案し、Semantic Segme">
+<meta itemprop="datePublished" content="2020-12-28T01:34:07+09:00" />
+<meta itemprop="dateModified" content="2020-12-28T01:34:07+09:00" />
+<meta itemprop="wordCount" content="1469">
+
+
+
+<meta itemprop="keywords" content="Semantic Segmentation," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Vortex Pooling"/>
+<meta name="twitter:description" content="C.-W. Xie, et al. &ldquo;Vortex pooling: Improving context representation in semantic segmentation&rdquo; (2018) 概要 DeepLab v3のAtrous Spatial Pyramid Pooling(ASPP) moduleを改良したVortex Pooling moduleを提案し、Semantic Segme"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="https://nohzen.github.io/Hugo_blog/" class="logo">memo</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="https://nohzen.github.io/Hugo_blog/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="https://nohzen.github.io/Hugo_blog/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="https://nohzen.github.io/Hugo_blog/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="https://nohzen.github.io/Hugo_blog/" class="logo">memo</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="https://nohzen.github.io/Hugo_blog/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="https://nohzen.github.io/Hugo_blog/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="https://nohzen.github.io/Hugo_blog/tags/">Tags</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Vortex Pooling</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2020-12-28 </span>
+        
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">コンテンツ</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#概要">概要</a></li>
+    <li><a href="#論文情報">論文情報</a>
+      <ul>
+        <li><a href="#リンク">リンク</a></li>
+        <li><a href="#著者">著者</a></li>
+      </ul>
+    </li>
+    <li><a href="#内容">内容</a>
+      <ul>
+        <li><a href="#先行研究-atrous-spatial-pyramid-pooling-aspp">先行研究: Atrous Spatial Pyramid Pooling (ASPP)</a></li>
+        <li><a href="#先行研究-spatial-pyramid-pooling">先行研究: Spatial Pyramid Pooling</a></li>
+        <li><a href="#vortex-pooling">Vortex Pooling</a></li>
+      </ul>
+    </li>
+    <li><a href="#感想">感想</a></li>
+    <li><a href="#参考文献">参考文献</a></li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <p><a href="https://arxiv.org/abs/1804.06242">C.-W. Xie, et al. &ldquo;Vortex pooling: Improving context representation in semantic segmentation&rdquo; (2018)</a></p>
+<h1 id="概要">概要</h1>
+<ul>
+<li>DeepLab v3のAtrous Spatial Pyramid Pooling(ASPP) moduleを改良した<strong>Vortex Pooling</strong> moduleを提案し、Semantic Segmentationで精度が向上することを確認</li>
+</ul>
+<h1 id="論文情報">論文情報</h1>
+<h2 id="リンク">リンク</h2>
+<ul>
+<li>野良実装
+<ul>
+<li><a href="https://github.com/MTCloudVision/deeplabv3-mxnet_gluon">https://github.com/MTCloudVision/deeplabv3-mxnet_gluon</a></li>
+</ul>
+</li>
+</ul>
+<h2 id="著者">著者</h2>
+<p>Nanjing University（南京大学）のグループ</p>
+<ul>
+<li><a href="http://www.lamda.nju.edu.cn/xiecw/?AspxAutoDetectCookieSupport=1">Chen-Wei Xie</a></li>
+<li><a href="http://zhouhy.org/">Hong-Yu Zhou</a></li>
+<li><a href="https://cs.nju.edu.cn/wujx/">Jianxin Wu</a></li>
+</ul>
+<h1 id="内容">内容</h1>
+<ul>
+<li>単純な畳み込み層では実効的なreceptive fieldが狭く、Globalなコンテキストが有効に活用できない</li>
+<li>そこで、DeepLabの<strong>Atrous Spatial Pyramid Pooling</strong> (ASPP) moduleや<strong>Spatial Pyramid Pooling</strong> moduleのような複数のスケールの特徴量を合体させる手法が提案されてきた
+<ul>
+<li>ASPP moduleとPSP moduleを合体させたような<strong>Vortex Pooling</strong>を提案した</li>
+</ul>
+</li>
+<li>DeepLab v3のASPP moduleに比べて、少し精度が上がり、少し処理時間が増えた</li>
+</ul>
+<h2 id="先行研究-atrous-spatial-pyramid-pooling-aspp">先行研究: Atrous Spatial Pyramid Pooling (ASPP)</h2>
+<ul>
+<li>異なるdilation(例えば1, 12, 24, 36)のAtrous conv (=Dilated conv)をConcateすることで、様々なスケールの特徴量を利用する（下図）
+<figure class="center">
+    <img src="https://nohzen.github.io/Hugo_blog/images/xie2018_vortexPooling/Fig2.png"
+         alt="[Xie&#43;(2018)] Fig. 2より引用" width="500"/> <figcaption>
+            <p>[Xie+(2018)] Fig. 2より引用</p>
+        </figcaption>
+</figure>
+</li>
+<li>DeepLab v3のASPPでは、4つのdilation convに加えて、global average poolingもconcateする</li>
+</ul>
+<h2 id="先行研究-spatial-pyramid-pooling">先行研究: Spatial Pyramid Pooling</h2>
+<ul>
+<li>入力特徴量の解像度に依らず、固定のBox数のAverage Poolingを行い、concateする（下図）
+<figure class="center">
+    <img src="https://nohzen.github.io/Hugo_blog/images/xie2018_vortexPooling/PSP_Fig3.png"
+         alt="[PSPNet] Fig. 3より引用" width="400"/> <figcaption>
+            <p>[PSPNet] Fig. 3より引用</p>
+        </figcaption>
+</figure>
+</li>
+</ul>
+<h2 id="vortex-pooling">Vortex Pooling</h2>
+<ul>
+<li>ASPPでは、入力特徴量のほんの一部のpixelしか出力に寄与しない</li>
+<li>そこで、dilated convをする前にkxk average poolingをすることで、寄与するpixelを増やす（下左図: Module A）</li>
+<li>大きいdilationのdilated convほどGlobalな情報なので、average poolingのカーネルを大きくする（下右図: Module B = Vortex Pooling）
+<ul>
+<li>Module Bの方がModule Aより精度が高くなり、工夫して計算することで計算量も減らせる</li>
+<li>ave poolingの後に3x3 convを行っているが、これが1x1 convならSpatial Pyramid Poolingっぽくなる（厳密には、Spatial Pyramid Poolingはbilinear補間するのに対し、Vortex poolingは全部真面目に計算するので別物）
+<figure class="center">
+    <img src="https://nohzen.github.io/Hugo_blog/images/xie2018_vortexPooling/Fig3.png"
+         alt="[Xie&#43;(2018)] Fig. 3より引用" width="900"/> <figcaption>
+            <p>[Xie+(2018)] Fig. 3より引用</p>
+        </figcaption>
+</figure>
+</li>
+</ul>
+</li>
+<li>Module B (Vortex Pooling)は、average poolingのカーネルを$k, k^2, k^3$のようなサイズに設定することで、下図のように小さいカーネルのaverage poolingの計算結果を元に次に大きいカーネルのaverage poolingの計算を行える。
+<figure class="center">
+    <img src="https://nohzen.github.io/Hugo_blog/images/xie2018_vortexPooling/Fig4.png"
+         alt="[Xie&#43;(2018)] Fig. 4より引用" width="500"/> <figcaption>
+            <p>[Xie+(2018)] Fig. 4より引用</p>
+        </figcaption>
+</figure>
+</li>
+<li>DeepLab v3と同様に、Global Average Poolingと合わせてConcateする
+<figure class="center">
+    <img src="https://nohzen.github.io/Hugo_blog/images/xie2018_vortexPooling/Fig5.png"
+         alt="[Xie&#43;(2018)] Fig. 5より引用" width="800"/> <figcaption>
+            <p>[Xie+(2018)] Fig. 5より引用</p>
+        </figcaption>
+</figure>
+</li>
+</ul>
+<h1 id="感想">感想</h1>
+<ul>
+<li>ASPPに比べてけっこう計算量が増えそう。ただ、Dilated convは演算量が少なくてもキャッシュ効率が悪いので、演算量ほど差はないかも知れない。
+<ul>
+<li>処理時間は、ネットワーク全体のものしか書かれていないが、ASPP vs Vortex pooingのところだけだとどれくらいの比なのか気になった</li>
+</ul>
+</li>
+<li>Module B (Vortex Pooling)の入力は前段のネットワークで計算した特徴量だが、それを画像だと思うとImage Pyramidに似ている
+<ul>
+<li>厳密にはカーネルが大きくなっても解像度は小さくならないので、Image Pyramidとは少し違う</li>
+<li>Spatial Pyramid Poolingの方がまんまImage Pyramid</li>
+<li>そう考えると、ASPPはlow-pass filterをしてないImage Pyramidみたいになっている。<strong>ASPPはエイリアス</strong>が発生しそう。</li>
+</ul>
+</li>
+<li>なぜ、Vortex Poolingって名前？</li>
+</ul>
+<h1 id="参考文献">参考文献</h1>
+<ul>
+<li>[PSPNet] <a href="https://arxiv.org/abs/1612.01105">H. Zhao, et al. &ldquo;Pyramid Scene Parsing Network&rdquo; (2016)</a></li>
+<li>[DeepLab v3] <a href="https://arxiv.org/abs/1706.05587">L.-C. Chen, et al., &ldquo;Rethinking Atrous Convolution for Semantic Image Segmentation&rdquo; (2017)</a></li>
+</ul>
+
+    </div>
+
+    
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="https://nohzen.github.io/Hugo_blog/tags/semantic-segmentation/">Semantic Segmentation</a>
+          </div>
+      <nav class="post-nav">
+        
+        <a class="next" href="https://nohzen.github.io/Hugo_blog/post/zhu2018_defomv2/">
+            <span class="next-text nav-default">Deformable ConvNets v2</span>
+            <span class="next-text nav-mobile">次の記事へ</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+  <a href="https://nohzen.github.io/Hugo_blog/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2020<span class="heart"><i class="iconfont icon-heart"></i></span><span>nohzen</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="https://nohzen.github.io/Hugo_blog/js/main.min.c12618f9a600c40bd024996677e951e64d3487006775aeb22e200c990006c5c7.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        tags: 'ams',
+        }
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@3.0.5/es5/tex-mml-chtml.js" integrity="sha256-HGLuEfFcsUJGhvB8cQ8nr0gai9EucOOaIxFw7qxmd+w=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>
