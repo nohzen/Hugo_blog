@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>StereoDRNet - memo</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="nohzen" /><meta name="description" content="R. Chabra, et al. &amp;ldquo;Stereodrnet: Dilated residual stereonet&amp;rdquo; (2019) CVPR2019 論文情報 リンク 3次元再構成の結果動画 著者実装（pytorch）の公開はなし 著者 第一著者がFacebook Reality Labsでイン" /><meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.75.1 with theme even" />
+
+
+<link rel="canonical" href="https://nohzen.github.io/Hugo_blog/post/chabra2019_stereodrnet/" />
+<link rel="apple-touch-icon" sizes="180x180" href="https://nohzen.github.io/Hugo_blog/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://nohzen.github.io/Hugo_blog/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="https://nohzen.github.io/Hugo_blog/favicon-16x16.png">
+<link rel="manifest" href="https://nohzen.github.io/Hugo_blog/manifest.json">
+<link rel="mask-icon" href="https://nohzen.github.io/Hugo_blog/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="https://nohzen.github.io/Hugo_blog/sass/main.min.c7bc1becf36bcf6a9ebd25d2947e43a2eb745ddb0c9a32b43126fd7fa460c351.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="StereoDRNet" />
+<meta property="og:description" content="R. Chabra, et al. &ldquo;Stereodrnet: Dilated residual stereonet&rdquo; (2019) CVPR2019 論文情報 リンク 3次元再構成の結果動画 著者実装（pytorch）の公開はなし 著者 第一著者がFacebook Reality Labsでイン" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://nohzen.github.io/Hugo_blog/post/chabra2019_stereodrnet/" />
+<meta property="article:published_time" content="2020-12-29T19:22:12+09:00" />
+<meta property="article:modified_time" content="2020-12-29T19:22:12+09:00" />
+<meta itemprop="name" content="StereoDRNet">
+<meta itemprop="description" content="R. Chabra, et al. &ldquo;Stereodrnet: Dilated residual stereonet&rdquo; (2019) CVPR2019 論文情報 リンク 3次元再構成の結果動画 著者実装（pytorch）の公開はなし 著者 第一著者がFacebook Reality Labsでイン">
+<meta itemprop="datePublished" content="2020-12-29T19:22:12+09:00" />
+<meta itemprop="dateModified" content="2020-12-29T19:22:12+09:00" />
+<meta itemprop="wordCount" content="2447">
+
+
+
+<meta itemprop="keywords" content="Stereo Matching," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="StereoDRNet"/>
+<meta name="twitter:description" content="R. Chabra, et al. &ldquo;Stereodrnet: Dilated residual stereonet&rdquo; (2019) CVPR2019 論文情報 リンク 3次元再構成の結果動画 著者実装（pytorch）の公開はなし 著者 第一著者がFacebook Reality Labsでイン"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="https://nohzen.github.io/Hugo_blog/" class="logo">memo</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="https://nohzen.github.io/Hugo_blog/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="https://nohzen.github.io/Hugo_blog/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="https://nohzen.github.io/Hugo_blog/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="https://nohzen.github.io/Hugo_blog/" class="logo">memo</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="https://nohzen.github.io/Hugo_blog/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="https://nohzen.github.io/Hugo_blog/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="https://nohzen.github.io/Hugo_blog/tags/">Tags</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">StereoDRNet</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2020-12-29 </span>
+        
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">コンテンツ</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#論文情報">論文情報</a>
+      <ul>
+        <li><a href="#リンク">リンク</a></li>
+        <li><a href="#著者">著者</a></li>
+      </ul>
+    </li>
+    <li><a href="#概要">概要</a></li>
+    <li><a href="#内容">内容</a>
+      <ul>
+        <li><a href="#特徴量抽出">特徴量抽出</a></li>
+        <li><a href="#cost-volume作成">Cost Volume作成</a></li>
+        <li><a href="#cost-volume-filtering-dilated-residual-cost-filtering">Cost Volume Filtering: Dilated Residual Cost Filtering</a></li>
+        <li><a href="#regression">Regression</a></li>
+        <li><a href="#refinement">Refinement</a></li>
+        <li><a href="#実験">実験</a></li>
+      </ul>
+    </li>
+    <li><a href="#感想">感想</a></li>
+    <li><a href="#参考文献">参考文献</a></li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <p><a href="https://arxiv.org/abs/1904.02251">R. Chabra, et al. &ldquo;Stereodrnet: Dilated residual stereonet&rdquo; (2019) CVPR2019</a></p>
+<h1 id="論文情報">論文情報</h1>
+<h2 id="リンク">リンク</h2>
+<ul>
+<li><a href="https://www.youtube.com/watch?v=AkopUYMIxV4">3次元再構成の結果動画</a></li>
+<li>著者実装（pytorch）の公開はなし</li>
+</ul>
+<h2 id="著者">著者</h2>
+<p>第一著者がFacebook Reality Labsでインターン中の仕事</p>
+<ul>
+<li><a href="http://www.cs.unc.edu/~rohanc/">Rohan Chabra</a></li>
+<li><a href="http://people.csail.mit.edu/jstraub/">Julian Straub</a> Facebook Reality Labs</li>
+<li>Chris Sweeney, Facebook Reality Labs</li>
+<li>Richard Newcombe, Facebook Reality Labs</li>
+<li><a href="http://henryfuchs.web.unc.edu/">Henry Fuchs</a>, University of North Carolina</li>
+</ul>
+<h1 id="概要">概要</h1>
+<ul>
+<li>[GCNet]や[PSMNet]をベースとした<strong>StereoDRNet</strong>という視差推定のネットワークを提案</li>
+<li>Refinementのモジュールを追加
+<ul>
+<li>入力にphotometric errorだけでなく、geometric errorをRefinementの追加</li>
+<li>出力に視差だけでなく、occlutionを追加</li>
+</ul>
+</li>
+<li>特徴量抽出部で<strong>Vortex Pooling</strong>を、cost volume finteringで<strong>Atrous Spatial Pyramid Pooling (ASPP) の3D conv版</strong>を利用することで、Globalな情報を活用
+<ul>
+<li>Textureがない領域や反射がある領域で精度の向上が期待できる</li>
+</ul>
+</li>
+</ul>
+<h1 id="内容">内容</h1>
+<ul>
+<li>全体の構造は下図
+<figure>
+    <img src="https://nohzen.github.io/Hugo_blog/images/chabra2019_stereoDRNet/Fig2.png"
+         alt="[Chabra&#43;(2019)] Fig.2より引用" width="1000"/> <figcaption>
+            <p>[Chabra+(2019)] Fig.2より引用</p>
+        </figcaption>
+</figure>
+</li>
+<li>詳細はTable 8を参照</li>
+</ul>
+<h2 id="特徴量抽出">特徴量抽出</h2>
+<ul>
+<li>先行研究と同様に、左右の画像で同じ重み</li>
+<li>Globalな情報を得るために、PSMNetではSpatial Pyramid Poolingを使っているが、本研究では<strong>Vortex Pooling</strong>を使う(Fig2のSpatial Poolingの部分)</li>
+<li>特徴量のサイズは入力解像度のW/4 x H/4で、特徴量次元は32にする</li>
+</ul>
+<h2 id="cost-volume作成">Cost Volume作成</h2>
+<ul>
+<li>左右の画像の<strong>特徴量の差</strong>でcost volumeを作る
+<ul>
+<li>[DispNet]では内積、[GCNet]ではconcateすることでcost volumeを作っている。</li>
+<li>精度的にはどれを使ってもあまり変わらない？（実験結果はなし）</li>
+</ul>
+</li>
+<li>左をBase画像とした視差と、右をBase画像とした視差を両方同時に学習するので、特徴量の差はBaseを変えて2つ計算してconcateする</li>
+</ul>
+<h2 id="cost-volume-filtering-dilated-residual-cost-filtering">Cost Volume Filtering: Dilated Residual Cost Filtering</h2>
+<ul>
+<li>3D convを使ったFilterの途中で、<strong>Atrous Spatial Pyramid Pooling (ASPP) の3D conv版</strong>みたいなもの（下図のdilationが違う畳み込みが並列している部分）を使う（receptive fieldを広げる目的？）</li>
+<li>Filterは同じような構造のものを3回繰り返し、2回目以降は差分を学習
+<ul>
+<li>3回繰り返し、中間出力も学習し、差分を学習するのは[PSMNet]と同じ
+<figure>
+    <img src="https://nohzen.github.io/Hugo_blog/images/chabra2019_stereoDRNet/Fig4.png"
+         alt="[Chabra&#43;(2019)] Fig.4より引用" width="1000"/> <figcaption>
+            <p>[Chabra+(2019)] Fig.4より引用</p>
+        </figcaption>
+</figure>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="regression">Regression</h2>
+<ul>
+<li>[GCNet]と同様にSoft argminを使って視差の推論結果を出力し、LossはHuber loss(smooth-L1的なやつ)</li>
+<li>Cost Volume Filteringの3つの中間出力からLossを計算([PSMNet]と同じ)</li>
+<li>推論した視差は元解像度のW/4 x H/4なので、Bilinear拡大してからLossを計算する</li>
+</ul>
+<h2 id="refinement">Refinement</h2>
+<ul>
+<li>ネットワークは[StereoNet]の畳み込みをdilationありにしたもの</li>
+<li>Refinement前の視差はW/4 x H/4のサイズで計算していたが、Refinementの計算は入力解像度W x Hで行う</li>
+<li>入力
+<ul>
+<li>前段で推論した荒い視差（3つのうち、最後の出力を利用）</li>
+<li>入力画像</li>
+<li><strong>再構成誤差(photometric error)</strong>: 推論した視差で、左右の画像を比較した時のL1誤差</li>
+<li><strong>geometric error</strong>: 左右の画像をそれぞれBase画像とした時の2つの視差を比較した時のL1誤差</li>
+</ul>
+</li>
+<li>photometric errorとgeometric errorはLossとして学習するより、入力とした方が精度が良い（実験結果はなし）
+<ul>
+<li>これらはocculutionがある時にはゼロにならないので</li>
+</ul>
+</li>
+<li>Lossは、<strong>occlutionのcross entropyと、視差のHuber loss</strong></li>
+<li>詳細はTable 7を参照
+<figure>
+    <img src="https://nohzen.github.io/Hugo_blog/images/chabra2019_stereoDRNet/Fig5.png"
+         alt="[Chabra&#43;(2019)] Fig.5より引用" width="500"/> <figcaption>
+            <p>[Chabra+(2019)] Fig.5より引用</p>
+        </figcaption>
+</figure>
+</li>
+</ul>
+<h2 id="実験">実験</h2>
+<ul>
+<li>SceneFlow
+<ul>
+<li>左右の画像それぞれをBaseとした時のGTがある</li>
+<li>occlutionのGTはないので、左右の視差が1pixel以上離れていた時とする（GTのgeometric errorが1以上？）</li>
+<li>Table 2
+<ul>
+<li>Spatial pyramid pooling &lt; Vortex Pooling</li>
+<li>荒い視差推定で、中間出力ありだと精度向上</li>
+<li>photometric errorとgeometric errorとocclutionの推定はどれもあったほうがいい</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>KITTI2012, KITTI2015
+<ul>
+<li>SceneFlowで学習済みのモデルをfine-tunning</li>
+<li>KITTI2015の方ではSOTAではない</li>
+<li>GTがsparseなので、Refinementは効果なし</li>
+</ul>
+</li>
+<li>ETH3D
+<ul>
+<li>SceneFlowで学習済みのモデルをfine-tunning</li>
+<li>SOTAで、DN-CSSも同程度</li>
+</ul>
+</li>
+<li>3D再構成
+<ul>
+<li>[25]の方法でGTデータ作成</li>
+<li>[15] Truncated signed distance function (TSDF) でdepthから3D 再構成</li>
+<li>fine-tunningの時に一部をマスク</li>
+</ul>
+</li>
+</ul>
+<h1 id="感想">感想</h1>
+<ul>
+<li>photometric error, geometric error
+<ul>
+<li>教師なし学習系手法のLossでして使われているのは見るが、入力として使うのは初めて見た</li>
+<li>Lossとして使うより入力として使った方がいいと書いてあったが、実験結果が無かったので、残念</li>
+<li>入力として使う場合、これらは2枚の入力画像と2つの視差マップから計算できるので冗長だが…</li>
+</ul>
+</li>
+<li>Vortex Poolingで、average poolingのサイズ(=dilateionのサイズ)を原論文の3-9-27から3-5-15に変えている
+<ul>
+<li>その方が視差推定では精度が良かったらしい</li>
+<li>$k, k^2, k^3$でないと効率的に計算できないのでは？全体の計算量からすると無視できる？</li>
+</ul>
+</li>
+</ul>
+<h1 id="参考文献">参考文献</h1>
+<ul>
+<li>Stereo Matching
+<ul>
+<li>[2] [PSMNet] J.-R. Chang, et al. “Pyramid Stereo Matching Network” (2018)</li>
+<li>[7] [GCNet] A. Kendall et al. “End-to-End Learning of Geometry and Context for Deep Stereo Regression” (2017)</li>
+<li>[13] [DispNet] N. Mayer et al. “A Large Dataset to Train Convolutional Networks for Disparity, Optical Flow, and Scene Flow Estimation” (2015)</li>
+</ul>
+</li>
+<li>Globalな情報の活用
+<ul>
+<li>[Spatial Pyramid Pooling] H. Zhao, et al. “Pyramid Scene Parsing Network” (2016)</li>
+<li>[3] L.-C. Chen, et al. &ldquo;Deeplab: Semantic image segmentation with deep convolutional nets, atrous convolution, and fully connected crfs&rdquo; (2018) Atrous spatial pyramid pooling</li>
+<li>[26] C.-W. Xie, et al. &ldquo;Vortex pooling: Improving context representation in semantic segmentation&rdquo; (2018) Vortex pooling</li>
+</ul>
+</li>
+<li>入力画像or特徴量のphotometric errorを入力としたRefinementを使っている研究
+<ul>
+<li>[17] [CRL] J. Pang, et al. &ldquo;Cascade residual learning: A two-stage convolutional neural network for stereo matching&rdquo; (2017)</li>
+<li>[12] [iResNet] Z. Liang, et al. &ldquo;Learning for disparity estimation through feature constancy&rdquo; (2018)</li>
+<li>[8] [StereoNet] S. Khamis, et al. &ldquo;Stereonet: Guided hierarchical refinement for real-time edge-aware depth prediction&rdquo; (2018) この研究はPhotometric errorとか使ってない（紹介論文には使っていると書かれていたが）</li>
+<li>[5] [FlowNet2] E. Ilg, et al. &ldquo;Flownet 2.0: Evolution of optical flow estimation with deep networks&rdquo; (2017)</li>
+<li>[31] [ActiveStereoNet] Y. Zhang, et al. &ldquo;Activestereonet: end-to-end self-supervised learning for active stereo systems&rdquo; (2018)</li>
+</ul>
+</li>
+<li>3D再構成
+<ul>
+<li>[15] R. A. Newcombe, et al. &ldquo;Kinectfusion: Real-time dense surface mapping and tracking&rdquo; (2011) Dense 3D reconstruction</li>
+<li>[25] T. Whelan, et al. &ldquo;Reconstructing scenes with mirror and glass surfaces&rdquo; (2018) structure light</li>
+</ul>
+</li>
+</ul>
+
+    </div>
+
+    
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="https://nohzen.github.io/Hugo_blog/tags/stereo-matching/">Stereo Matching</a>
+          </div>
+      <nav class="post-nav">
+        
+        <a class="next" href="https://nohzen.github.io/Hugo_blog/post/xie2018_vortexpooling/">
+            <span class="next-text nav-default">Vortex Pooling</span>
+            <span class="next-text nav-mobile">次の記事へ</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+  <a href="https://nohzen.github.io/Hugo_blog/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2020<span class="heart"><i class="iconfont icon-heart"></i></span><span>nohzen</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="https://nohzen.github.io/Hugo_blog/js/main.min.c12618f9a600c40bd024996677e951e64d3487006775aeb22e200c990006c5c7.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        tags: 'ams',
+        }
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@3.0.5/es5/tex-mml-chtml.js" integrity="sha256-HGLuEfFcsUJGhvB8cQ8nr0gai9EucOOaIxFw7qxmd+w=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

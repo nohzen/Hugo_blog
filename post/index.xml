@@ -6,7 +6,16 @@
     <description>Recent content in Posts on memo</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
-    <lastBuildDate>Mon, 28 Dec 2020 01:34:07 +0900</lastBuildDate><atom:link href="https://nohzen.github.io/Hugo_blog/post/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 29 Dec 2020 19:22:12 +0900</lastBuildDate><atom:link href="https://nohzen.github.io/Hugo_blog/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>StereoDRNet</title>
+      <link>https://nohzen.github.io/Hugo_blog/post/chabra2019_stereodrnet/</link>
+      <pubDate>Tue, 29 Dec 2020 19:22:12 +0900</pubDate>
+      
+      <guid>https://nohzen.github.io/Hugo_blog/post/chabra2019_stereodrnet/</guid>
+      <description>R. Chabra, et al. &amp;ldquo;Stereodrnet: Dilated residual stereonet&amp;rdquo; (2019) CVPR2019 論文情報 リンク 3次元再構成の結果動画 著者実装（pytorch）の公開はなし 著者 第一著者がFacebook Reality Labsでイン</description>
+    </item>
+    
     <item>
       <title>Vortex Pooling</title>
       <link>https://nohzen.github.io/Hugo_blog/post/xie2018_vortexpooling/</link>
