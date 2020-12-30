@@ -6,7 +6,16 @@
     <description>Recent content on memo</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
-    <lastBuildDate>Tue, 29 Dec 2020 19:22:12 +0900</lastBuildDate><atom:link href="https://nohzen.github.io/Hugo_blog/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 30 Dec 2020 19:15:22 +0900</lastBuildDate><atom:link href="https://nohzen.github.io/Hugo_blog/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>AANet</title>
+      <link>https://nohzen.github.io/Hugo_blog/post/xu2019_aanet/</link>
+      <pubDate>Wed, 30 Dec 2020 19:15:22 +0900</pubDate>
+      
+      <guid>https://nohzen.github.io/Hugo_blog/post/xu2019_aanet/</guid>
+      <description>H. Xu, et al. &amp;ldquo;AANet: Adaptive Aggregation Network for Efficient Stereo Matching&amp;rdquo; (2020) CVPR2020 論文情報 リンク 著者実装 概要Youtube 著者 University of Science and Technology of China (USTC)のメンバー Haofei Xu Juyong Zhang 概要 stereo matchingで</description>
+    </item>
+    
     <item>
       <title>StereoDRNet</title>
       <link>https://nohzen.github.io/Hugo_blog/post/chabra2019_stereodrnet/</link>

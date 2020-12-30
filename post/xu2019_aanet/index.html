@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>AANet - memo</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="nohzen" /><meta name="description" content="H. Xu, et al. &amp;ldquo;AANet: Adaptive Aggregation Network for Efficient Stereo Matching&amp;rdquo; (2020) CVPR2020 論文情報 リンク 著者実装 概要Youtube 著者 University of Science and Technology of China (USTC)のメンバー Haofei Xu Juyong Zhang 概要 stereo matchingで" /><meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.75.1 with theme even" />
+
+
+<link rel="canonical" href="https://nohzen.github.io/Hugo_blog/post/xu2019_aanet/" />
+<link rel="apple-touch-icon" sizes="180x180" href="https://nohzen.github.io/Hugo_blog/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://nohzen.github.io/Hugo_blog/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="https://nohzen.github.io/Hugo_blog/favicon-16x16.png">
+<link rel="manifest" href="https://nohzen.github.io/Hugo_blog/manifest.json">
+<link rel="mask-icon" href="https://nohzen.github.io/Hugo_blog/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="https://nohzen.github.io/Hugo_blog/sass/main.min.c7bc1becf36bcf6a9ebd25d2947e43a2eb745ddb0c9a32b43126fd7fa460c351.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="AANet" />
+<meta property="og:description" content="H. Xu, et al. &ldquo;AANet: Adaptive Aggregation Network for Efficient Stereo Matching&rdquo; (2020) CVPR2020 論文情報 リンク 著者実装 概要Youtube 著者 University of Science and Technology of China (USTC)のメンバー Haofei Xu Juyong Zhang 概要 stereo matchingで" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://nohzen.github.io/Hugo_blog/post/xu2019_aanet/" />
+<meta property="article:published_time" content="2020-12-30T19:15:22+09:00" />
+<meta property="article:modified_time" content="2020-12-30T19:15:22+09:00" />
+<meta itemprop="name" content="AANet">
+<meta itemprop="description" content="H. Xu, et al. &ldquo;AANet: Adaptive Aggregation Network for Efficient Stereo Matching&rdquo; (2020) CVPR2020 論文情報 リンク 著者実装 概要Youtube 著者 University of Science and Technology of China (USTC)のメンバー Haofei Xu Juyong Zhang 概要 stereo matchingで">
+<meta itemprop="datePublished" content="2020-12-30T19:15:22+09:00" />
+<meta itemprop="dateModified" content="2020-12-30T19:15:22+09:00" />
+<meta itemprop="wordCount" content="2918">
+
+
+
+<meta itemprop="keywords" content="Stereo Matching," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="AANet"/>
+<meta name="twitter:description" content="H. Xu, et al. &ldquo;AANet: Adaptive Aggregation Network for Efficient Stereo Matching&rdquo; (2020) CVPR2020 論文情報 リンク 著者実装 概要Youtube 著者 University of Science and Technology of China (USTC)のメンバー Haofei Xu Juyong Zhang 概要 stereo matchingで"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="https://nohzen.github.io/Hugo_blog/" class="logo">memo</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="https://nohzen.github.io/Hugo_blog/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="https://nohzen.github.io/Hugo_blog/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="https://nohzen.github.io/Hugo_blog/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="https://nohzen.github.io/Hugo_blog/" class="logo">memo</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="https://nohzen.github.io/Hugo_blog/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="https://nohzen.github.io/Hugo_blog/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="https://nohzen.github.io/Hugo_blog/tags/">Tags</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">AANet</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2020-12-30 </span>
+        
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">コンテンツ</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#論文情報">論文情報</a>
+      <ul>
+        <li><a href="#リンク">リンク</a></li>
+        <li><a href="#著者">著者</a></li>
+      </ul>
+    </li>
+    <li><a href="#概要">概要</a></li>
+    <li><a href="#内容">内容</a>
+      <ul>
+        <li><a href="#cost-volume">cost volume</a></li>
+        <li><a href="#adaptive-aggregation-module-aamodule">Adaptive Aggregation Module (AAmodule)</a>
+          <ul>
+            <li><a href="#adaptive-intra-scale-aggregation-isa-module">Adaptive Intra-Scale Aggregation (ISA) module</a></li>
+            <li><a href="#adaptive-cross-scale-aggregation-csa-module">Adaptive Cross-Scale Aggregation (CSA) module</a></li>
+          </ul>
+        </li>
+        <li><a href="#他">他</a></li>
+        <li><a href="#実験">実験</a></li>
+      </ul>
+    </li>
+    <li><a href="#感想">感想</a></li>
+    <li><a href="#参考文献">参考文献</a></li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <p><a href="https://arxiv.org/abs/2004.09548">H. Xu, et al. &ldquo;AANet: Adaptive Aggregation Network for Efficient Stereo Matching&rdquo; (2020) CVPR2020</a></p>
+<h1 id="論文情報">論文情報</h1>
+<h2 id="リンク">リンク</h2>
+<ul>
+<li><a href="https://github.com/haofeixu/aanet">著者実装</a></li>
+<li><a href="https://www.youtube.com/watch?v=nIXx9kvG_xI">概要Youtube</a></li>
+</ul>
+<h2 id="著者">著者</h2>
+<p>University of Science and Technology of China (USTC)のメンバー</p>
+<ul>
+<li>Haofei Xu</li>
+<li><a href="http://staff.ustc.edu.cn/~juyong/">Juyong Zhang</a></li>
+</ul>
+<h1 id="概要">概要</h1>
+<ul>
+<li>stereo matchingで標準的に用いられているcost volumeの3D convの代替となる<strong>Adaptive Aggregation</strong> Moduleを提案</li>
+<li>Adaptive Aggregation Moduleは以下の2つの相補的なモジュールからなる
+<ul>
+<li>Adaptive <strong>Intra-Scale Aggregation</strong> (ISA): <strong>Deformable conv v2</strong>を利用したエッジ保存のFiltering</li>
+<li>Adaptive <strong>Cross-Scale Aggregation</strong> (CSA): 異なるスケールのcost volumeを混ぜ合わせる（Textureがない領域で精度が向上）</li>
+</ul>
+</li>
+<li>Adaptive Aggregation Moduleを用いた<strong>Adaptive Aggregation Network</strong> (AANet)は、SOTAに近い精度で高速</li>
+</ul>
+<h1 id="内容">内容</h1>
+<ul>
+<li><strong>Adaptive Aggregation Network</strong> (AANet)の全体図は以下。</li>
+<li>3つの解像度で視差を出力し学習する。推論時は、一番大きい解像度W/3 x H/3をRefinementしたものを使う。
+<figure>
+    <img src="https://nohzen.github.io/Hugo_blog/images/xu2019_AANet/Fig2.png"
+         alt="[Xu&#43;(2019)] Fig.2より引用。Refinementは省略されている。" width="1000"/> <figcaption>
+            <p>[Xu+(2019)] Fig.2より引用。Refinementは省略されている。</p>
+        </figcaption>
+</figure>
+</li>
+</ul>
+<h2 id="cost-volume">cost volume</h2>
+<ul>
+<li>左右の画像から、ResNet系をベース(一部をdeformable convに置き換え)とした<strong>Feature Pyramid Network</strong>で1/3, 1/6, 1/12のサイズの特徴量を作る</li>
+<li><strong>特徴量の内積で3つのスケールのcost volume</strong>を作る
+<ul>
+<li>cost volumeを内積で作るのは[DispNetCorr]と同じ（feature correlationなどとも呼んでいる）。</li>
+<li>[GCNet]などはconcateで作っている。
+<figure>
+    <img src="https://nohzen.github.io/Hugo_blog/images/xu2019_AANet/Eq2.png" width="500"/> 
+</figure>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="adaptive-aggregation-module-aamodule">Adaptive Aggregation Module (AAmodule)</h2>
+<p>GCNet以来、3D convが精度向上に寄与してきたが、処理速度が遅い。
+GANetは一部の3D convを別のLayerに置き換えたが、依然として3D convも使っている
+以下のISA moduleとCSA moduleを組み合わせたAAmoduleを6つstackする</p>
+<h3 id="adaptive-intra-scale-aggregation-isa-module">Adaptive Intra-Scale Aggregation (ISA) module</h3>
+<ul>
+<li><strong>Deformable conv v2</strong>と同様に、畳み込みのサンプリングの場所$\Delta p_k$ と 追加のweight $m_k$ も学習
+<ul>
+<li>オリジナルのDeformable conv v2では、offset $\Delta p_k$とweight $m_k$は各チャンネルで同じ値だったが、本研究ではdisparityをG=2個のグループに分けて、グループ内で同じ値にする</li>
+<li>dilated convも同時に使う (下式の固定位置サンプリング$p_k$を一定間隔のサンプリングにする？)</li>
+<li>ResNet風に、1x1 -&gt; 3x3 -&gt; 1x1 として3x3のところでDeformable convを使う（ただし、ResNetと違ってチャンネル数=Disparity数は一定）
+<figure>
+    <img src="https://nohzen.github.io/Hugo_blog/images/xu2019_AANet/Eq4.png" width="500"/> 
+</figure>
+</li>
+</ul>
+</li>
+<li>Adaptive Intra-Scale Aggregation (Deformable conv v2)を使うことで、視差マップのエッジが鈍るのを防げる
+<ul>
+<li>下図(b)みたいに、単純にcost aggreagationをするとエッジを跨いで平均してしまい、エッジが鈍る</li>
+<li>Deformable convを使うと、下図(c)みたいにサンプリングする場所が同じ物体の場所だけになる（そうなるように学習されるはず）ので、エッジが鈍るのを防げる
+<figure>
+    <img src="https://nohzen.github.io/Hugo_blog/images/xu2019_AANet/Fig1.png"
+         alt="[Xu&#43;(2019)] Fig.1より引用" width="500"/> <figcaption>
+            <p>[Xu+(2019)] Fig.1より引用</p>
+        </figcaption>
+</figure>
+</li>
+</ul>
+</li>
+<li>疑問
+<ul>
+<li>Cost volumeに幅・高さ・視差の次元に加えて、チャネル次元はある？<br>
+→ [GCNet]などと違って、内積でcost volumeを作っているので、チャンネル次元は消えている</li>
+<li>追加のweight $m_k$を導入することで、content adaptive(position specific)になると強調しているが、$m_k$も元のweightとそこまで変わらないような（畳み込みで計算されたものって点は違うが）</li>
+</ul>
+</li>
+</ul>
+<h3 id="adaptive-cross-scale-aggregation-csa-module">Adaptive Cross-Scale Aggregation (CSA) module</h3>
+<ul>
+<li>Textureがない領域では、荒い解像度でStereo Matchingするといい[21, 36]</li>
+<li>そこで、いくつかのスケールでのcost aggregationに相互作用を入れた[44]をNNにする: 関連 [33, 39, 30, 35]
+<ul>
+<li>$f$にはHRNet[32]の式を採用。解像度を合わせるための畳み込み層。</li>
+<li>HRNetと違い、1/2解像度にした時にはチャンネル数(disparity数)を半分にする(解像度が下がると、disparityの解像度も下がるので)
+<figure>
+    <img src="https://nohzen.github.io/Hugo_blog/images/xu2019_AANet/Eq5.png" width="500"/> 
+</figure>
+
+<figure>
+    <img src="https://nohzen.github.io/Hugo_blog/images/xu2019_AANet/Eq6.png" width="500"/> 
+</figure>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="他">他</h2>
+<ul>
+<li>Refinement
+<ul>
+<li>[StereoDRNet]と同じネットワークで</li>
+<li>1/3の荒い視差マップを、1/3 -&gt; 1/2 -&gt; 1 と2段階で元解像度にする</li>
+<li>[StereoDRNet]みたいに、Occlutionの出力や、photometric error/geometric errorの入力はしない？</li>
+</ul>
+</li>
+<li>[GCNet]と同じsoft-argminで視差を推定</li>
+<li>Loss: [PSMNet]と同じsmooth-L1 loss
+<ul>
+<li>前段の荒い視差推定が3つのスケールで、後段のRefinementが2つのスケールで出力を持つので、合計5つのLossの重み付き和が最終的なLoss</li>
+</ul>
+</li>
+<li>Distillation: KITTIのように、SparseなGTしかない場合は、GTがないPixelでは他のネットワーク(GANetなど)の推論結果をGTとする</li>
+</ul>
+<h2 id="実験">実験</h2>
+<ul>
+<li>SceneFlow, KITTI2012, KITTI2015, Middlebury
+<ul>
+<li>高速でSOTAに近い精度（KITTIではSOTAの[GANet], [GwcNet]には負けている）</li>
+</ul>
+</li>
+<li>Ablation study:
+<ul>
+<li>Table 1, Fig 3: 基本はISA, CSAがあった方がいい (KITTI2015のD1指標では、ISAはない方がいい)</li>
+<li>Fig5: KITTIでGTがない領域(空とか)では、Distillationを使った方がアーティファクトが減る（D1は向上して、EPEは悪化）</li>
+<li>Table 2: 先行研究の3D convを提案手法のAdaptive Aggregation Moduleに置き換えると精度が向上し、処理時間が短くなる</li>
+</ul>
+</li>
+<li>AANet+: GANet-AA([GANet]の3D convをAAmoduleに置き換えたもの)のRefinement部分を改善したモデル
+<ul>
+<li>AANetより高精度で高速</li>
+</ul>
+</li>
+</ul>
+<h1 id="感想">感想</h1>
+<ul>
+<li>AANetを長々と説明していたのに、AANet+(GANetベースのモデル)の方が精度が良くて処理速度も早いみたい…</li>
+<li>3D convだと空間方向に加えて、視差方向のFilterにもなっているが、それが失われる？
+<ul>
+<li>3D convだと、cost volumeは4次元(C, D, W, H)で、DWH方向には畳み込み、C方向には行列積(fully connected)</li>
+<li>AAmoduleだと、cost volumeは3次元(D, W, H)で、WH方向には畳み込み、D方向には行列積(fully connected)</li>
+<li>たぶん、AAmoduleの方が視差方向には計算量が多いFilterになっている</li>
+<li>視差方向も空間方向と同じで、あまりに値が離れているものは関連して無さそうなので、畳み込みの方が良さそうな気がする</li>
+<li>cost volumeを3次元(D, W, H)で、3D conv(ただしチャンネル数は1)とかにしたら、提案手法より良くなったりしないだろうか</li>
+<li>今回の結果に寄与しているのが、ISA(Deformable conv)なのか、CSA(cost volumeを複数スケール持つ)なのか、cost volumeを4次元から3次元にしたこと(concateでなく内積でcost volumeを作る)なのか</li>
+<li>ISAやCSAは3D convとも組み合わせられると思うので、試してみたい</li>
+</ul>
+</li>
+</ul>
+<h1 id="参考文献">参考文献</h1>
+<ul>
+<li>Stereo Matching
+<ul>
+<li>[20] [DispNetCorr] N. Mayer et al. “A Large Dataset to Train Convolutional Networks for Disparity, Optical Flow, and Scene Flow Estimation” (2015)</li>
+<li>[14] [GCNet] A. Kendall, et al. “End-to-end learning of geometry and context for deep stereo regression” (2017)</li>
+<li>[6] [DeepPruner] Shivam Duggal, et al. &ldquo;Deeppruner: Learning efficient stereo matching via differentiable patchmatch&rdquo; (2019) 本研究と同時に使える</li>
+<li>[3] [StereoDRNet] R. Chabra, et al. “Stereodrnet: Dilated residual stereonet” (2019)</li>
+</ul>
+</li>
+<li>Deformable conv
+<ul>
+<li>[5] J. Dai, et al. &ldquo;Deformable convolutional networks&rdquo; (2017)</li>
+<li>[45] X. Zhu, et al. &ldquo;Deformable convnets v2: More deformable, better results&rdquo; (2019)</li>
+</ul>
+</li>
+<li>Dilated conv
+<ul>
+<li>[41] F. Yu, et al. &ldquo;Dilated residual networks&rdquo; (2017)</li>
+</ul>
+</li>
+<li>Cross-scale
+<ul>
+<li>[44] K. Zhang, et al. &ldquo;Cross-scale cost aggregation for stereo matching&rdquo; (2014)</li>
+<li>[32] [HRNet] K. Sun, et al. &ldquo;Deep high-resolution representation learning for human pose estimation&rdquo; (2019)</li>
+</ul>
+</li>
+<li>Distillation
+<ul>
+<li>[10] G. Hinton, et al. &ldquo;Distilling the knowledge in a neural network&rdquo; (2015)</li>
+</ul>
+</li>
+</ul>
+
+    </div>
+
+    
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="https://nohzen.github.io/Hugo_blog/tags/stereo-matching/">Stereo Matching</a>
+          </div>
+      <nav class="post-nav">
+        
+        <a class="next" href="https://nohzen.github.io/Hugo_blog/post/chabra2019_stereodrnet/">
+            <span class="next-text nav-default">StereoDRNet</span>
+            <span class="next-text nav-mobile">次の記事へ</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+  <a href="https://nohzen.github.io/Hugo_blog/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2020<span class="heart"><i class="iconfont icon-heart"></i></span><span>nohzen</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="https://nohzen.github.io/Hugo_blog/js/main.min.c12618f9a600c40bd024996677e951e64d3487006775aeb22e200c990006c5c7.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        tags: 'ams',
+        }
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@3.0.5/es5/tex-mml-chtml.js" integrity="sha256-HGLuEfFcsUJGhvB8cQ8nr0gai9EucOOaIxFw7qxmd+w=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>
