@@ -6,7 +6,16 @@
     <description>Recent content on memo</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
-    <lastBuildDate>Wed, 30 Dec 2020 19:15:22 +0900</lastBuildDate><atom:link href="https://nohzen.github.io/Hugo_blog/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 31 Dec 2020 15:56:52 +0900</lastBuildDate><atom:link href="https://nohzen.github.io/Hugo_blog/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>GANet</title>
+      <link>https://nohzen.github.io/Hugo_blog/post/zhang2019_ganet/</link>
+      <pubDate>Thu, 31 Dec 2020 15:56:52 +0900</pubDate>
+      
+      <guid>https://nohzen.github.io/Hugo_blog/post/zhang2019_ganet/</guid>
+      <description>F. Zhang, et al. &amp;ldquo;GA-Net: Guided Aggregation Net for End-to-end Stereo Matching&amp;rdquo; (2019) CVPR 2019 論文情報 リンク 著者実装 Youtube 音がない？ 著者 Univeristy of OxfordのTorr Vision Groupのメンバー Feihu Zhang Univeristy of Oxford Victor Prisacariu Univeristy of Oxford Ruigang Yang</description>
+    </item>
+    
     <item>
       <title>AANet</title>
       <link>https://nohzen.github.io/Hugo_blog/post/xu2019_aanet/</link>
